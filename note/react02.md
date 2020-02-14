@@ -187,7 +187,9 @@ React生命周期的回调函数总结成表格如下：
 
 
 
-## 高阶组件函数调用
+## 高阶组件函数调用（重要
+
+为了提高组件的复用率，就要保证组件功能单一性，若要满足复杂需求就需要扩展功能单一的组件，于是有了HOC高阶组件。高阶组件是一个工厂函数，它接收一个组件并返回另一个组件
 
 高阶组件（HOC）是 React 中用于复用组件逻辑的一种高级技巧。HOC 自身不是 React API 的一部分，它是一种基于 React 的组合特性而形成的设计模式
 
@@ -210,6 +212,8 @@ const EnhancedComponent = higherOrderComponent(WrappedComponent);
 ​            2.**不要在render方法中使用HOC，会报错**
 
 **解决方法是在别的组件中定义HOC后export暴露，在当前组件用import引用；或者直接在当前组件中定义后，再将该HOC用另一个变量名引用，再在render中用这个变量名作为标签名**
+
+例子在class-text的comments.js中
 
 ```
 class Fn extends Component {
@@ -237,7 +241,7 @@ let WrapCommentList = enhance(Fn)
  <WrapCommentList />
 ```
 
-
+新版例子在class-tets的HocTest.js中
 
 ## 通过原生的方式获取元素并绑定事件
 
@@ -351,6 +355,8 @@ reload：把一个方法传递给子组件
 ## 扩展
 ### context特性
 
+react中使用context实现祖代组件向后代组件跨层级传值，vue中的provide&indect来源于context。
+
 在父组件上，直接共享一个context对象，子孙组件不需要逐层传递数据，可以直接获取
 
 记住一串单词组合`getChildContextTypes`
@@ -376,6 +382,12 @@ reload：把一个方法传递给子组件
     color: ReactTypes.string //如果子组件想要使用父组件通过context共享的数据，一定要在使用前做一下数据校验
   }
 ```
+
+新版：
+
+在context模式下有两个角色：Provider：外层提供数据的组件
+
+​                                                    Consumer：内层获取数据的组件
 
 
 

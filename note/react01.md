@@ -335,6 +335,25 @@ function Hello(props) {
 }
 ```
 
+还可以传递方法，子组件再通过方法的参数传递给父组件信息
+
+```
+父组件
+<Clock change={date => console.log(date.toLocaleTimeString())}/>
+子组件
+ //定时器
+    this.timerid = setInterval(()=>{
+      this.setState({
+        date: new Date()
+      },()=>{
+        // 每次状态更新就通知父组件
+        this.props.change(this.state.date);//直接把最新的state数据 传递给父组件
+      })
+    },1000)
+```
+
+
+
 ### 属性扩散
 
 ...obj语法，表示把这个对象上的所有属性展开放在这个位置
@@ -419,9 +438,9 @@ class 组件名称 extends React.Component {
 }
 ```
 
-### this.setState({})
+# this.setState({})
 
-里面可以直接传对象，也可以写一个方法，写方法时要return
+1.里面可以直接传对象，也可以写一个方法，写方法时要return
 
 ```
 changeHandler = (e)=> {
@@ -448,6 +467,57 @@ changeHandler = (e)=> {
 		//所以当立即调用完this.setState后，输出的state可能是旧的
 		//console.log(this.state.num)
 	}
+```
+
+2.setState是批量操作的
+
+3.this.setState通常是异步的：
+
+```
+// 假如couter初始值为0，执行三次以后其结果是多少？
+    // 若同一个key多次出现，最后那个起作用
+    // this.setState({ counter: this.state.counter + 1 }, ()=>{
+    //     console.log(this.state.counter); // 1
+    // }); 
+    // this.setState({ counter: this.state.counter + 1 }, ()=>{
+    //     console.log(this.state.counter); // 1
+    // }); 
+    // this.setState({ counter: this.state.counter + 1 }, ()=>{
+    //     console.log(this.state.counter); // 1
+    // }); 
+    这个回调函数会在值全部更新完才执行
+    
+    或者直接用函数的形式执行：
+    this.setState((state,props)=>{拿到最新的值})
+    
+    this.setState(
+      nextState => {
+        console.log(nextState.counter); // 0
+        return { counter: nextState.counter + 1 }; // 1
+      },
+      () => {
+        console.log(this.state.counter); // 3
+      }
+    );
+    this.setState(
+      nextState => {
+        console.log(nextState.counter); // 1
+        return { counter: nextState.counter + 1 }; // 2
+      },
+      () => {
+        console.log(this.state.counter); // 3
+      }
+    );
+    this.setState(
+      nextState => {
+        console.log(nextState.counter); // 1
+        return { counter: nextState.counter + 1 }; // 2
+      },
+      () => {
+        console.log(this.state.counter); // 3
+      }
+    );
+    所有的回调函数都是在所有state更新后才执行的，所以都是3
 ```
 
 
@@ -522,16 +592,27 @@ changeHandler = (e)=> {
 
 ## 两种创建组件方式的对比
 
-**构造函数在外部定义时，要引入React；类在外部定义时，还要引入component，并继承**
+构造函数在外部定义时，要引入React；类在外部定义时，还要引入component，并继承
 
-**构造函数创造的组件如果想接受父组件传递的参数，必须在函数参数里预先定义props：function fn(props)**
+构造函数创造的组件如果想接受父组件传递的参数，必须在函数参数里预先定义props：function fn(props)
 
-**类中的render可以直接通过this.props（返回的是一个数组）访问到，不需要预先定义；但constructor还是要预定义props形参**
+类中的render可以直接通过this.props（返回的是一个数组）访问到，不需要预先定义；但constructor还是要预定义props形参
 
-**注意：render中可以通过this.props.属性名拿到父组件传来的属性内容，通过this,props.children渲染父组件在子组件内部插入的内容**
+注意：render中可以通过this.props.属性名拿到父组件传来的属性内容，通过this,props.children渲染父组件在子组件内部插入的内容
 
-1. 用构造函数创建出来的组件：专业的名字叫做“无状态组件”
-2. 用class关键字创建出来的组件：专业的名字叫做“有状态组件”
+1. **用构造函数创建出来的组件：专业的名字叫做“无状态组件”**
+
+   **更新：函数组件的状态管理：hooks**
+
+     **主要api：useState，useEffect**
+
+2. **用class关键字创建出来的组件：专业的名字叫做“有状态组件”**
+
+   
+
+   ***关于状态的最新笔记见pdf加router那个文件夹里的StateMgt.js***
+
+   
 
 > 用构造函数创建出来的组件，和用class创建出来的组件，这两种不同的组件之间的**本质区别就是**：有无state属性！！！
 > 有状态组件和无状态组件之间的本质区别就是：有无state属性！
