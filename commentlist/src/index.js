@@ -5,8 +5,8 @@ import CMTList from './CmtList';
 import Context from './Context'
 import * as serviceWorker from './serviceWorker';
 
-// ReactDOM.render(<CMTList />, document.getElementById('root'));
-ReactDOM.render(<Context/>, document.getElementById('root'));
+ ReactDOM.render(<CMTList />, document.getElementById('root'));
+//ReactDOM.render(<Context/>, document.getElementById('root'));
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
