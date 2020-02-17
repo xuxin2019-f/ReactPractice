@@ -16,7 +16,7 @@ redux里的reducers相当于vuex的mutation，并且不应该改之前的值，�
 
 ## redux上手
 
-需要学习很多概念，以一个累加器距离
+需要学习很多概念，以一个累加器举例
 
 1.需要一个store来存储数据
 
@@ -48,6 +48,16 @@ redux里的reducers相当于vuex的mutation，并且不应该改之前的值，�
 
 **太麻烦了，所以需要react-redux 的支持**
 
+### react-redux原理
+
+核心任务
+
+实现一个高阶函数工厂connect，可以根据传入状态映射规则函数和派发起映射规则函数映射需要的属性，**可以处理变更监测和刷新任务**
+
+实现一个Provider组件可以传递store
+
+包装目的：自动刷新，react-redux替我们执行了subscribe订阅，使我们不需要再订阅
+
 ### react-redux提供了两个api
 
 1.Provider为后代组件提供store
@@ -56,13 +66,13 @@ redux里的reducers相当于vuex的mutation，并且不应该改之前的值，�
 
 connect需要配置 @connect（stats=>({}),{add: ()=>({type:’add’})})
 
-第一个参数mapStateToProps
+**第一个参数mapStateToProps**
 
 是状态值（映射到合适的属性上，将来可以通过this.props.属性得到）
 
 简单来说可以通过this.props拿到这个connect
 
-第二个参数mapDispatchToProps
+**第二个参数mapDispatchToProps**
 
 把dispatch映射到属性上
 
@@ -76,7 +86,7 @@ connect需要配置 @connect（stats=>({}),{add: ()=>({type:’add’})})
 
 
 
-异步操作：
+### 异步操作：
 
 安装中间件后
 
@@ -156,7 +166,7 @@ export const counterReducer = function(state = 0, action) {
   };
 ```
 
-模块化
+### 模块化
 
 实现将多个reducer整合（就是给每个reducer起名字
 
@@ -178,11 +188,15 @@ const store = createStore(
 
 
 
-扩展
+## 扩展
 
-redux原理
+### redux原理
 
-核心实现
+手写原理 实现createStore
+
+createStore暴露了三个接口：分别是getState，dispatch，subscribe
+
+#### 核心实现
 
 - 存储状态state
 - 获取状态getState
@@ -191,11 +205,38 @@ redux原理
 
 见store/kredux.js
 
-传入reducer
+##### 传入reducer
 
-模拟页：MyReduxTest中创建store
+##### 模拟页：
+
+MyReduxTest中创建store
 
 ```
 const  store = createStore(counterReducer)
+获取并派发
+ render() {
+    return (
+      <div>
+        {store.getState()}
+        <button onClick={()=>store.dispatch({type:'add'})}>+</button>
+      </div>
+    );
+  }
+  更改订阅
+  componentDidMount() {
+    store.subscribe(() => this.forceUpdate());
+  }
 ```
+
+##### 实现中间件
+
+redux中间件机制
+
+不加之前 action=>store.dispatch=>直接到store的若干reducer
+
+加了之后 dispatch通过appllyMiddleware这个函数形成了一个superDispatch（强化dispatch）,功能强大，然后action=>若干中间件再到store里的reducer
+
+
+
+作业：用redux实现一个小项目
 
