@@ -20,6 +20,12 @@ redux里的reducers相当于vuex的mutation，并且不应该改之前的值，�
 
 1.需要一个store来存储数据
 
+应用中所有的 state 都以一个对象树的形式储存在一个单一的 store 中。 惟一改变 state 的办法是触发 action (**描述如何处理state的对象，即dispatch**)。
+
+为了实现根据 action 的信息来改变 state 树，你需要编写 reducers。
+
+action 是一个哈希对象
+
 2.store里的reducer（其实就是一个函数，接收一些action，根据不同action进行不同操作）来初始化state并定义state修改规则
 
 3.改状态：通过dispatch派发一个action来提交对数据的修改
@@ -77,6 +83,8 @@ connect需要配置 @connect（stats=>({}),{add: ()=>({type:’add’})})
 把dispatch映射到属性上
 
 是一个对象，对象里的每个值都是一个函数，每个函数返回一个对象
+
+**即这里的每个对象都是一个action creator**
 
 如果没有第二个参数，connect自动会定义dispatch，然后从store里查询type
 
