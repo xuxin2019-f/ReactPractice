@@ -211,7 +211,17 @@ createStore暴露了三个接口：分别是getState，dispatch，subscribe
 - 更新状态dispatch
 - 变更订阅subscribe
 
-见store/kredux.js
+**定义createStore**
+
+**见store/kredux.js**
+
+1.enhancer相当于强化器
+
+2.dispatch的参数永远是action，定义dispatch函数时将action返回了，便于中间件的操作
+
+3.强化器的定义函数中定义midApi来给若干中间件传参数dispatch和getState，使所有中间件拥有这两个能力，所以在MyReduxTest中定义的中间件logger和thunk里都可以接受这两个参数。同时，这两个中间件都在最后返回了dispatch(action)，因为在kredux的dispatch函数定义中，最终会返回action，便于下一个中间件的执行
+
+4.MyReduxTest中thunk中间件的定义，判断如果action类型是函数的话，传入两个参数，因此在下面render界面可以直接接收到。
 
 ##### 传入reducer
 
@@ -248,3 +258,41 @@ redux中间件机制
 
 作业：用redux实现一个小项目
 
+见class-test/todolist.js
+
+
+
+### react-redux原理
+
+#### 核心任务
+
+实现一个高阶函数工厂connect，可以根据传入状态映射规则函数和派发起映射规则函数映射需要的属性，**可以处理变更检测和刷新任务**
+
+见pdf
+
+其中update（）中
+
+**stateProps**得到的是一个对象，如
+
+```
+state => ({num:state.counter})
+```
+
+**dispatchProps**得到的也是一个对象
+
+```
+// {add:(...args)=>({type:'add'})}
+转化成
+// {add:(...args)=> dispatch(creator(...args))}
+```
+
+在setState中
+
+```
+props:{...this.state.props,// 展开之前的值
+       ...stateProps, //展开 num:state.counter
+       ...dispatchProps //展开派发函数add:(...args)=>
+                         dispatch(creator(...args))
+```
+
+实现一个	Provider组件可以传递store
