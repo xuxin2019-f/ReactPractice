@@ -60,9 +60,129 @@ action 是一个哈希对象
 
 实现一个高阶函数工厂connect，可以根据传入状态映射规则函数和派发起映射规则函数映射需要的属性，**可以处理变更监测和刷新任务**
 
-实现一个Provider组件可以传递store
+**实现一个Provider组件可以传递store**
 
 包装目的：自动刷新，react-redux替我们执行了subscribe订阅，使我们不需要再订阅
+
+**详细：简书查得**
+
+React-Redux 将**所有组件**分成两大类：**UI 组件**（presentational component）和**容器组件**（container component）
+
+### UI组件
+
+
+
+- 只负责 UI 的呈现，不带有任何业务逻辑
+- 没有状态（即不使用this.state这个变量）
+- 所有数据都由参数（this.props）提供
+- 不使用任何 Redux 的 API
+
+### 容器组件
+
+
+
+- 负责管理数据和业务逻辑，不负责 UI 的呈现
+- 带有内部状态
+- 使用 Redux 的 API
+
+**UI 组件负责 UI 的呈现，容器组件负责管理数据和逻辑。**
+
+如果一个组件既有 UI 又有业务逻辑，那怎么办？回答是，将它拆分成下面的结构：**外面是一个容器组件，里面包了一个UI 组件。前者负责与外部的通信，将数据传给后者，由后者渲染出视图。**
+
+React-Redux 规定，**所有的 UI 组件都由用户提供，容器组件则是由 React-Redux 自动生成。也就是说，用户负责视觉层，状态管理则是全部交给它。**
+
+### connect()
+
+
+
+```javascript
+import { connect } from 'react-redux'
+const VisibleTodoList = connect()(TodoList);
+```
+
+上面VisibleTodoList 便是通过UI组件TodoList,通过connect方法自动生成的容器组件。
+ 但需要定义业务逻辑，组件才有意义。
+
+
+
+```javascript
+import { connect } from 'react-redux'
+
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
+```
+
+connect方法接受两个参数：**mapStateToProps和mapDispatchToProps。它们定义了 UI 组件的业务逻辑。前者负责输入逻辑，即将state映射到 UI 组件的参数（props），后者负责输出逻辑，即将用户对 UI 组件的操作映射成 Action**。
+
+### mapStateToProps()
+
+它是一个函数，建立一个从（外部的）state对象到（UI 组件的）props对象的映射关系。
+ mapStateToProps执行后应该返回一个对象，里面的每一个键值对就是一个映射。
+
+
+
+```jsx
+const mapStateToProps = (state) => {
+  return {
+    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+  }
+}
+```
+
+mapStateToProps是一个函数，它接受state作为参数，返回一个对象。这个对象有一个todos属性，代表 UI 组件的同名参数，后面的getVisibleTodos也是一个函数，可以从state算出 todos 的值。
+
+### mapDispatchToProps()
+
+mapDispatchToProps是connect函数的第二个参数，**用来建立 UI 组件的参数到store.dispatch方法的映射。它定义了哪些用户的操作应该当作 Action，传给 Store。它可以是一个函数，也可以是一个对象。**
+
+- 是函数则会得到dispatch和ownProps（容器组件的props对象）两个参数。
+
+
+
+```tsx
+const mapDispatchToProps = (
+  dispatch,
+  ownProps
+) => {
+  return {
+    onClick: () => {
+      dispatch({
+        type: 'SET_VISIBILITY_FILTER',
+        filter: ownProps.filter
+      });
+    }
+  };
+}
+```
+
+从上面代码可以看到，mapDispatchToProps作为函数，应该返回一个对象，该对象的每个键值对都是一个映射，定义了 UI 组件的参数怎样发出 Action。
+
+### <Provider> 组件
+
+connect方法生成容器组件以后，需要让容器组件拿到state对象，才能生成 UI 组件的参数。
+ React-Redux 提供Provider组件，可以让容器组件拿到state。
+
+
+
+```jsx
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import todoApp from './reducers'
+import App from './components/App'
+
+let store = createStore(todoApp);
+
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
+```
+
+上面代码中，Provider在根组件外面包了一层，这样一来，App的所有子组件就默认都可以拿到state了。
 
 ### react-redux提供了两个api
 
@@ -296,3 +416,98 @@ props:{...this.state.props,// 展开之前的值
 ```
 
 实现一个	Provider组件可以传递store
+
+## 用redux结合router实现登录跳转页面
+
+#### 1.创建/store/index.js
+
+创建reducer（直接写在这个页面了），导入中间件thunk（为了能实现异步操作login), 创建store实例，导出store
+
+#### 2.在RouterTest中实现页面
+
+从react-redux中导入connect实现自动刷新等功能
+
+创建异步操作login（action creator）
+
+```
+// 创建一个异步操作
+const login = ()=> dispatch =>{
+  dispatch({type:'request'})
+  setTimeout(()=>{
+    dispatch({type:'login'})
+  },2000)
+}
+```
+
+想要实现功能的代码：
+
+```
+<PrivateRoute path="/management" component={ProductMgt} />
+<Route path="/login" component={Login} />
+```
+
+其中路由守卫：
+
+```
+const PrivateRoute = connect(state => ({isLogin: state.user.login}))(
+  ({ component: Component, isLogin, ...rest })=>{
+    return (
+    //利用Route中的render属性做条件渲染
+    <Route
+      {...rest}
+      render={
+        // props === ({ match, history, location })
+        props =>
+          isLogin ? (
+            <Component />
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/login",
+                //  如果登陆成功，回跳到当前这个地址
+                state: { redirect: props.location.pathname }
+              }}
+            />
+          )
+      }
+    />
+  );
+  })
+```
+
+其中Login组件的定义：
+
+```
+const Login = connect(
+  state => ({isLogin:state.user.login,
+    loading:state.user.loading}),
+  {login}
+  // 发现这里的location就是上面路由守卫里传的to属性的参数
+)(({location,login,isLogin,loading})=> {
+  const redirect = location.state.redirect || '/'
+  if(isLogin) {
+    return <Redirect to={redirect}/>
+  }
+  return (
+    <div>
+      <div>Login</div>
+      <button onClick={login} disabled={loading} >
+        {loading ? '登陆中...' : '登录'}
+      </button>
+    </div>
+  )
+})
+```
+
+在index入口文件中导入Provider和store（注意react-redux需要用provider提供数据）
+
+```
+import {Provider} from 'react-redux'
+import store from './store/index'
+ReactDOM.render(<div>
+  <Provider store={store}>
+  <RouterTest />
+  </Provider>
+</div>, document.getElementById('root'));
+```
+
