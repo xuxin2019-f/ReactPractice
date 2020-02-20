@@ -13,13 +13,16 @@
       <change afterPath="$PROJECT_DIR$/class-test/src/KFormTest.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/class-test/src/MyReduxTest.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/class-test/src/ReduxTest.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/class-test/src/RouteTestsaga.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/class-test/src/Tree.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/class-test/src/css/todolist.module.css" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/class-test/src/lifecycle.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/class-test/src/store/counter.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/class-test/src/store/index.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/class-test/src/store/kredux.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/class-test/src/store/saga.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/class-test/src/store/store2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/class-test/src/store/user.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/class-test/src/todolist.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/router/config/env.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/router/config/jest/cssTransform.js" afterDir="false" />
@@ -50,6 +53,9 @@
       <change beforePath="$PROJECT_DIR$/commentlist/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/commentlist/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commentlist/src/Context.js" beforeDir="false" afterPath="$PROJECT_DIR$/commentlist/src/Context.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commentlist/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/commentlist/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/note/react02.md" beforeDir="false" afterPath="$PROJECT_DIR$/note/react02.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/note/react05-router.md" beforeDir="false" afterPath="$PROJECT_DIR$/note/react05-router.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router" beforeDir="false" afterPath="$PROJECT_DIR$/router" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/router/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/router/src/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/src/setupTests.js" beforeDir="false" />
@@ -68,21 +74,22 @@
     <session id="839474787">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
-          <entry key="project.open.time.15" value="1" />
+          <entry key="project.closed" value="10" />
+          <entry key="project.open.time.15" value="2" />
           <entry key="project.open.time.16" value="2" />
-          <entry key="project.open.time.17" value="1" />
+          <entry key="project.open.time.17" value="2" />
           <entry key="project.open.time.18" value="1" />
+          <entry key="project.open.time.19" value="1" />
           <entry key="project.open.time.20" value="1" />
           <entry key="project.open.time.22" value="1" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.opened" value="8" />
+          <entry key="project.opened" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="147" />
-          <entry key="js" value="15272" />
+          <entry key="js" value="17083" />
           <entry key="json" value="10" />
           <entry key="tsx" value="289" />
         </counts>
@@ -91,7 +98,7 @@
         <counts>
           <entry key="CSS" value="147" />
           <entry key="JSON" value="7" />
-          <entry key="JavaScript" value="15272" />
+          <entry key="JavaScript" value="17083" />
           <entry key="TypeScript JSX" value="289" />
           <entry key="tsconfig" value="3" />
         </counts>
@@ -99,7 +106,7 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="5" />
-          <entry key="js" value="114" />
+          <entry key="js" value="122" />
           <entry key="json" value="9" />
           <entry key="lock" value="1" />
           <entry key="ts" value="2" />
@@ -110,7 +117,7 @@
         <counts>
           <entry key="CSS" value="5" />
           <entry key="JSON" value="8" />
-          <entry key="JavaScript" value="114" />
+          <entry key="JavaScript" value="122" />
           <entry key="TypeScript" value="2" />
           <entry key="TypeScript JSX" value="2" />
           <entry key="tsconfig" value="1" />
@@ -119,18 +126,27 @@
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
         <counts>
-          <entry key="TypeScriptServerServiceImpl" value="8" />
+          <entry key="TypeScriptServerServiceImpl" value="11" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/router/src/RouterTest.js">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/class-test/src/store/saga.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="16" column="38" lean-forward="true" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
+            <state relative-caret-position="171">
+              <caret line="9" column="15" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/class-test/src/RouteTestsaga.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="608">
+              <caret line="32" column="39" selection-start-line="32" selection-start-column="39" selection-end-line="32" selection-end-column="39" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -139,34 +155,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/router/src/store/index.js">
+        <entry file="file://$PROJECT_DIR$/class-test/src/store/user.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
-              <folding>
-                <element signature="e#0#69#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/router/src/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="15" column="16" lean-forward="true" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/class-test/src/store/kredux.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1425">
-              <caret line="75" selection-start-line="75" selection-end-line="75" />
+            <state relative-caret-position="152">
+              <caret line="8" column="23" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -208,7 +200,6 @@
         <option value="$PROJECT_DIR$/class-test/src/Dialog.js" />
         <option value="$PROJECT_DIR$/class-test/src/CommentList.js" />
         <option value="$PROJECT_DIR$/class-test/src/KFormTest.js" />
-        <option value="$PROJECT_DIR$/class-test/src/store/index.js" />
         <option value="$PROJECT_DIR$/class-test/src/ReduxTest.js" />
         <option value="$PROJECT_DIR$/class-test/src/store/counter.js" />
         <option value="$PROJECT_DIR$/class-test/src/store/store2.js" />
@@ -216,13 +207,17 @@
         <option value="$PROJECT_DIR$/class-test/src/css/todolist.module.css" />
         <option value="$PROJECT_DIR$/class-test/src/store/kredux.js" />
         <option value="$PROJECT_DIR$/class-test/src/MyReduxTest.js" />
-        <option value="$PROJECT_DIR$/class-test/src/index.js" />
         <option value="D:/react05/src/components/RouterTest.js" />
         <option value="D:/react05/src/components/MyRouterTest.js" />
         <option value="$PROJECT_DIR$/router/src/MyRouterTest.js" />
         <option value="$PROJECT_DIR$/router/src/index.js" />
         <option value="$PROJECT_DIR$/router/src/store/index.js" />
         <option value="$PROJECT_DIR$/router/src/RouterTest.js" />
+        <option value="$PROJECT_DIR$/class-test/src/store/index.js" />
+        <option value="$PROJECT_DIR$/class-test/src/index.js" />
+        <option value="$PROJECT_DIR$/class-test/src/store/user.js" />
+        <option value="$PROJECT_DIR$/class-test/src/RouteTestsaga.js" />
+        <option value="$PROJECT_DIR$/class-test/src/store/saga.js" />
       </list>
     </option>
   </component>
@@ -244,11 +239,11 @@
       <path value="$PROJECT_DIR$/router/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="532" />
-    <option name="y" value="21" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="161" />
+    <option name="y" value="37" />
     <option name="width" value="1255" />
-    <option name="height" value="995" />
+    <option name="height" value="972" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -263,17 +258,6 @@
             <path>
               <item name="react" type="b2602c69:ProjectViewProjectNode" />
               <item name="react" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="react" type="b2602c69:ProjectViewProjectNode" />
-              <item name="react" type="462c0819:PsiDirectoryNode" />
-              <item name="class-test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="react" type="b2602c69:ProjectViewProjectNode" />
-              <item name="react" type="462c0819:PsiDirectoryNode" />
-              <item name="class-test" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="react" type="b2602c69:ProjectViewProjectNode" />
@@ -295,7 +279,7 @@
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://F:/代码/react/class-test/src/todolist.js" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../vuex/vuex-todos" />
+    <property name="last_opened_file_path" value="D:/06课react最佳实践（8月5号）/umi-test" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -331,22 +315,24 @@
       <workItem from="1581903918328" duration="27072000" />
       <workItem from="1582004902280" duration="13343000" />
       <workItem from="1582034057154" duration="1301000" />
-      <workItem from="1582080973100" duration="8884000" />
+      <workItem from="1582080973100" duration="9902000" />
+      <workItem from="1582119808295" duration="1261000" />
+      <workItem from="1582172712361" duration="1203000" />
+      <workItem from="1582190090272" duration="7370000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="100994000" />
+    <option name="totallyTimeSpent" value="111846000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="426" y="17" width="1004" height="796" extended-state="1" />
-    <editor active="true" />
+    <frame x="129" y="30" width="1004" height="777" extended-state="0" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.33471075" />
+      <window_info content_ui="combo" id="Project" order="1" weight="0.33471075" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="1" visible="true" weight="0.29713425" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="1" visible="true" weight="0.30590063" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="3" />
       <window_info anchor="bottom" id="Message" order="4" />
@@ -385,21 +371,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/class-test/jsconfig.json" />
-    <entry file="file://D:/react03/src/components/HocTest.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="665">
-          <caret line="56" column="12" lean-forward="true" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/react03/src/components/FormTest.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="74">
-          <caret line="50" column="21" lean-forward="true" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/class-test/src/HocTest.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="302">
@@ -555,13 +526,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/class-test/src/store/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="12" column="15" lean-forward="true" selection-start-line="12" selection-start-column="15" selection-end-line="12" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/class-test/src/store/counter.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
@@ -649,9 +613,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="532">
           <caret line="30" column="17" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -659,9 +620,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
           <caret line="8" column="10" lean-forward="true" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -669,9 +627,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2337">
           <caret line="125" column="20" lean-forward="true" selection-start-line="125" selection-start-column="20" selection-end-line="125" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -679,30 +634,37 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1292">
           <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/class-test/src/index.js">
+    <entry file="file://$PROJECT_DIR$/class-test/src/MyReduxTest.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="45" column="45" lean-forward="true" selection-start-line="45" selection-start-column="45" selection-end-line="45" selection-end-column="45" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#87#120#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="285">
+          <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class-test/src/store/kredux.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="75" selection-start-line="75" selection-end-line="75" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/router/src/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="15" column="16" lean-forward="true" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
+        <state relative-caret-position="131">
+          <caret line="15" column="16" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class-test/src/ReduxTest.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -718,35 +680,56 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/router/src/RouterTest.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="16" column="38" lean-forward="true" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
+        <state relative-caret-position="-2356">
+          <caret line="23" column="36" lean-forward="true" selection-start-line="23" selection-start-column="36" selection-end-line="23" selection-end-column="36" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/class-test/src/ReduxTest.js">
+    <entry file="file://$PROJECT_DIR$/class-test/src/store/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-135">
-          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+        <state relative-caret-position="266">
+          <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#70#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/class-test/src/MyReduxTest.js">
+    <entry file="file://$PROJECT_DIR$/class-test/src/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
+        <state relative-caret-position="228">
+          <caret line="31" column="42" lean-forward="true" selection-start-line="31" selection-start-column="42" selection-end-line="31" selection-end-column="42" />
+          <folding>
+            <element signature="e#87#120#0" expanded="true" />
+            <element signature="e#646#686#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class-test/src/RouteTestsaga.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="608">
+          <caret line="32" column="39" selection-start-line="32" selection-start-column="39" selection-end-line="32" selection-end-column="39" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/class-test/src/store/kredux.js">
+    <entry file="file://$PROJECT_DIR$/class-test/src/store/user.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1425">
-          <caret line="75" selection-start-line="75" selection-end-line="75" />
+        <state relative-caret-position="152">
+          <caret line="8" column="23" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class-test/src/store/saga.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="15" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
         </state>
       </provider>
     </entry>

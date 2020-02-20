@@ -385,6 +385,12 @@ react中使用context实现祖代组件向后代组件跨层级传值，vue中�
 
 新版：
 
+const Context = React.createContext();
+
+const Provider = Context.Provider
+
+const Consumer = Context.Consumer
+
 在context模式下有两个角色：Provider：外层提供数据的组件
 
 ​                                                    Consumer：内层获取数据的组件

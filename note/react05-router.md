@@ -256,7 +256,7 @@ react-router秉承一切皆组件，因此实现的核心就是BrowserRouter，R
 
 **match的实现是根据pathname（即url）和用户传递的属性（这里应该比较的是传递过来的path属性）获得match对象，需要引用matchPath.js工具**
 
-从this.props中解构出三个函数：children，component，render（条件渲染）（**意思就是如果父组件在调用Route的时候，传递了这三个函数的某一个，则就会被解构出来**）
+从this.props中解构出三个函数：children，component，render（条件渲染）（**意思就是如果父组件在调用Route的时候，传递了这三个函数的某一个，则就会被解构出来**），**这三个属性都接收一个函数作为值，都可以接收route的三个参数：history、location、match。优先级：children>component>render**
 
 如果children是个函数，将history，location，match作为参数传递进去
 
