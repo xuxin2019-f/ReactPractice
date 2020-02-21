@@ -8,29 +8,67 @@ import {
 import dynamic from 'umi/dynamic';
 import renderRoutes from 'umi/lib/renderRoutes';
 import history from '@@/history';
+import { routerRedux } from 'dva';
 
-const Router = DefaultRouter;
+const Router = routerRedux.ConnectedRouter;
 
 const routes = [
   {
     path: '/',
     exact: true,
     component: require('../index.js').default,
+    redirect: '/goods',
   },
   {
-    path: '/users',
-    exact: false,
-    component: require('../users/_layout.js').default,
+    path: '/',
+    component: require('../../layouts/index.js').default,
     routes: [
       {
-        path: '/users',
+        path: '/404',
         exact: true,
-        component: require('../users/index.js').default,
+        component: require('../404.js').default,
       },
       {
-        path: '/users/:id',
+        path: '/about',
         exact: true,
-        component: require('../users/$id.js').default,
+        component: require('../about.js').default,
+        title: 'AboutPage',
+        Routes: [require('../../routes/PrivateRoute.js').default],
+      },
+      {
+        path: '/login',
+        exact: true,
+        component: require('../login.js').default,
+      },
+      {
+        path: '/goods',
+        exact: true,
+        component: require('../goods.js').default,
+      },
+      {
+        path: '/users',
+        exact: false,
+        component: require('../users/_layout.js').default,
+        routes: [
+          {
+            path: '/users',
+            exact: true,
+            component: require('../users/index.js').default,
+          },
+          {
+            path: '/users/:id',
+            exact: true,
+            component: require('../users/$id.js').default,
+          },
+          {
+            component: () =>
+              React.createElement(
+                require('C:/Users/xuxin/AppData/Local/Yarn/Data/global/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+                  .default,
+                { pagesPath: 'pages', hasRoutesInConfig: false },
+              ),
+          },
+        ],
       },
       {
         component: () =>

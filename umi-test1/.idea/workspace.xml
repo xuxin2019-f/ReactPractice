@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="40fb38e1-6246-4da5-b9fb-73f824a7c0c3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../umi-test/.umirc.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../umi-test/models/goods.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../umi-test/src/routes/PrivateRoute.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../class-test" beforeDir="false" afterPath="$PROJECT_DIR$/../class-test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../note/react06.md" beforeDir="false" afterPath="$PROJECT_DIR$/../note/react06.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../router" beforeDir="false" afterPath="$PROJECT_DIR$/../router" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/@babel/register/.babel.7.4.5.development.json" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/@babel/register/.babel.7.4.5.development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/03864a8171b5ec9334cb8f98180801e2.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/03864a8171b5ec9334cb8f98180801e2.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/1a22f1bec129afad9115f5fbf5d51a7b.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/1a22f1bec129afad9115f5fbf5d51a7b.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/1e979ab79095504d8e67d99c6ad805ca.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/1e979ab79095504d8e67d99c6ad805ca.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/229da0f708ba77b3fcab08cb33f4e781.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/229da0f708ba77b3fcab08cb33f4e781.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/37de46485e175dced776a7031eead628.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/37de46485e175dced776a7031eead628.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/40e5eed8a4a8c2200725188ea22dfceb.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/40e5eed8a4a8c2200725188ea22dfceb.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/55412cd96e01b26e367b397e8ad2c76a.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/55412cd96e01b26e367b397e8ad2c76a.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/5a5d54cb7c5642bf26a09bfc50b9f963.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/5a5d54cb7c5642bf26a09bfc50b9f963.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/5bf77d7bb85a289140fc7452de04939a.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/5bf77d7bb85a289140fc7452de04939a.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/7b77d1f3b34c8bbaabe0e802a7bb5833.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/7b77d1f3b34c8bbaabe0e802a7bb5833.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/8c51b87eb00e1ea2147fb9bed6d6849f.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/8c51b87eb00e1ea2147fb9bed6d6849f.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/a054d0d2f00dd7692b6a4d3dc6c733e8.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/a054d0d2f00dd7692b6a4d3dc6c733e8.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/a9c6dfe170f7a8413b4aa613b68dad97.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/a9c6dfe170f7a8413b4aa613b68dad97.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/be5bc06f7693b79740408111d0c63b4f.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/be5bc06f7693b79740408111d0c63b4f.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/c02ba1825b1407117dd2e80b672757b4.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/c02ba1825b1407117dd2e80b672757b4.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/c827231405a3724bbf7ba7aeb9a5462a.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/c827231405a3724bbf7ba7aeb9a5462a.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/d8893ea7ad3d36b4d5b6f520d2ddae0d.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/d8893ea7ad3d36b4d5b6f520d2ddae0d.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/df65a13cee654a8f340949f9c1139bd5.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/df65a13cee654a8f340949f9c1139bd5.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/e962010629f53219cd72b143b31e0f24.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/e962010629f53219cd72b143b31e0f24.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/edfa88cdfbb9a55544f25629639027b6.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/edfa88cdfbb9a55544f25629639027b6.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/f1c42b25d4dc469b7d5be03c06b56abc.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/f1c42b25d4dc469b7d5be03c06b56abc.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/node_modules/.cache/babel-loader/f997c58ba59cf6db7d654388b8af8750.json.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/node_modules/.cache/babel-loader/f997c58ba59cf6db7d654388b8af8750.json.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/.umi/history.js" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/.umi/history.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/.umi/polyfills.js" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/.umi/polyfills.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/.umi/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/.umi/router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/.umi/umi.js" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/.umi/umi.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/.umi/umiExports.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/.umi/umiExports.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/users/$id.css" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/users/$id.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/users/$id.js" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/users/$id.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/users/_layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/users/_layout.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/users/_layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/users/_layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/users/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/users/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../umi-test/pages/users/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../umi-test/src/pages/users/index.js" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-1760020153">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="json" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JSON" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="json" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JSON" value="3" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/package.json" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/node_modules" />
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths>
+      <path value="$PROJECT_DIR$/package.json" />
+    </packageJsonPaths>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="60" />
+    <option name="y" value="27" />
+    <option name="width" value="1255" />
+    <option name="height" value="975" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="umi-test1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="umi-test1" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="umi-test1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="umi-test1" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../umi-test" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="40fb38e1-6246-4da5-b9fb-73f824a7c0c3" name="Default Changelist" comment="" />
+      <created>1582268555722</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1582268555722</updated>
+      <workItem from="1582268557043" duration="2610000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="2610000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="48" y="22" width="1004" height="780" extended-state="1" />
+    <layout>
+      <window_info id="Favorites" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.32921174" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+  </component>
+</project>

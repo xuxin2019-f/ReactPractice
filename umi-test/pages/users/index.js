@@ -1,8 +1,10 @@
 
 import styles from './index.css';
 import Link from 'umi/link'
+import router from 'umi/router'
 
-export default function() {
+
+export default function({hitstory}) {
   return (
     <div className={styles.normal}>
       <h1>Page index</h1>
@@ -10,6 +12,7 @@ export default function() {
         <li>
           <Link to='users/1'>tom</Link>
         </li>
+        <li onClick={()=>router.push('/users/2')}>jerry</li>
       </ul>
     </div>
   );
