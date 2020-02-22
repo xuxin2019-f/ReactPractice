@@ -399,3 +399,33 @@ yarn add antd -S
 
 引入ant-design-pro，安装： yarn add ant-design-pro --save
 
+测试1：404页面的快速构建
+
+修改404页面提示内容，404.js
+
+```
+import {Exception} from 'ant-design-pro'
+
+
+export default function() {
+  return (
+    <Exception type="404"backText="返回首页"></Exception>
+  );
+}
+
+exception组件的type404构建一个现成的404页面
+```
+
+测试2：登录login页面的快速构建
+
+ant-design-pro提供了一个Login的组件，直接使用即可
+
+思路
+
+1.pages/login.js 渲染页面
+
+2.mock/login.js模拟数据 （post /api/login)
+
+3.models/login.js 创建状态（reducer
+
+4.pages/login.js 通过connect拿到3中的状态，通过参数传递给function让其调用

@@ -1,6 +1,6 @@
 import './polyfills';
 import history from './history';
-
+import '../../global.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import findRoute, {
@@ -211,6 +211,62 @@ if (!__IS_BROWSER) {
 
 export { ReactDOMServer };
 export default (__IS_BROWSER ? null : serverRender);
+
+(() => {
+  try {
+    const ua = window.navigator.userAgent;
+    const isIE = ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1;
+    if (isIE) return;
+
+    // Umi UI Bubble
+    require('C:/Users/xuxin/AppData/Local/Yarn/Data/global/node_modules/umi-plugin-ui/lib/bubble').default(
+      {
+        port: 3000,
+        path: 'F:/代码/react/umi-test',
+        currentProject: '',
+        isBigfish: undefined,
+      },
+    );
+  } catch (e) {
+    console.warn('Umi UI render error:', e);
+  }
+})();
+
+(() => {
+  // Runtime block add component
+  window.GUmiUIFlag = require('C:/Users/xuxin/AppData/Local/Yarn/Data/global/node_modules/umi-build-dev/lib/plugins/commands/block/sdk/flagBabelPlugin/GUmiUIFlag.js').default;
+
+  // Enable/Disable block add edit mode
+  window.addEventListener(
+    'message',
+    event => {
+      try {
+        const { action, data } = JSON.parse(event.data);
+        switch (action) {
+          case 'umi.ui.checkValidEditSection':
+            const haveValid = !!document.querySelectorAll(
+              'div.g_umiuiBlockAddEditMode',
+            ).length;
+            const frame = document.getElementById('umi-ui-bubble');
+            if (frame && frame.contentWindow) {
+              frame.contentWindow.postMessage(
+                JSON.stringify({
+                  action: 'umi.ui.checkValidEditSection.success',
+                  payload: {
+                    haveValid,
+                  },
+                }),
+                '*',
+              );
+            }
+          default:
+            break;
+        }
+      } catch (e) {}
+    },
+    false,
+  );
+})();
 
 // hot module replacement
 if (__IS_BROWSER && module.hot) {

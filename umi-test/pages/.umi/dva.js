@@ -21,6 +21,7 @@ export function _onCreate() {
   });
   
   app.model({ namespace: 'goods', ...(require('F:/代码/react/umi-test/models/goods.js').default) });
+app.model({ namespace: 'user', ...(require('F:/代码/react/umi-test/models/user.js').default) });
   return app;
 }
 

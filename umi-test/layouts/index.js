@@ -4,10 +4,15 @@ const {Header, Footer, Content } = Layout
 import styles from './index.css';
 
 export default function(props) {
-  if(props.location.pathname === '/404'|| props.location.pathname === '/login') {
+  //如果是登录页面的话，不显示导航菜单，页面直接返回整个登录页面
+  // if(props.location.pathname === '/404'|| props.location.pathname === '/login') {
+  //   return <div>{props.children}</div>
+  // }
+  if(props.location.pathname === '/login') {
     return <div>{props.children}</div>
   }
   const selectedKeys = [props.location.pathname]
+  // 其他页面的话，显示导航菜单，在页面中间主体部分显示功能页面
   return (
      <Layout>
        {/*页头*/}

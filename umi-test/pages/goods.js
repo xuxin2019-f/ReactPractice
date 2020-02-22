@@ -1,36 +1,146 @@
-import { connect } from 'dva'
-import styles from './goods.css';
-import {useEffect} from 'react'
+import React, { Component } from "react";
+import { Card, Row, Col, Icon, Skeleton } from "antd";
+import { TagSelect } from "ant-design-pro";
+import { connect } from "dva";
 
-export default connect(
-   state => ({
-     goodsList: state.goods,//获取指定命名空间的模型状态
-     loading:state.loading}),
+@connect(
+  state => ({
+    courses: state.goods.courses,
+    tags: state.goods.tags,
+    // loading: state.loading
+  }),
   {
-    addGood:title => ({
-      type:'goods/addGood',
-      payload:title
-    }),
-    getLists: ()=>({
-      type:'goods/getLists'
+    getList: () => ({
+      type: "goods/getList"
     })
   }
-)(function({goodsList,addGood,getLists,loading}) {
-  useEffect(()=>{
-    // 实现第一次初始化
-    getLists()
-  },[])
-
-  console.log(loading)
-  if (loading.models.goods) {
-    return <div>加载中</div>
+)
+class Goods extends Component {
+  constructor(props) {
+    super(props);
+    // displayCourses为需要显示的商品数组
+    this.state = {
+      tags: [], // 默认未选中
+      displayCourses: new Array(8).fill({}) // 设置size可用于骨架屏展示
+    };
   }
-  return (
-    <div className={styles.normal}>
-        <ul>
-          {goodsList.map(good => (<li key={good.title}>{good.title}</li>))}
-        </ul>
-      <button onClick={() => addGood('商品'+new Date().getTime())}>新增</button>
-    </div>
-  );
-})
+  componentDidMount() {
+    this.props.getList();
+  }
+  componentWillReceiveProps(props) {
+    // 数据传入时执行一次tagSelectChange
+    if (props.tags.length) {
+      this.tagSelectChange(props.tags, props.courses);
+    }
+  }
+  tagSelectChange = (tags, courses = this.props.courses) => {
+    // 过滤出显示数据
+    let displayCourses = [];
+    tags.forEach(tag => {
+      displayCourses = [...displayCourses, ...courses[tag]];
+    });
+    this.setState({ displayCourses, tags });
+  };
+
+  addCart = (e, item) => {
+    e.stopPropagation();
+    this.props.addCart(item);
+  };
+
+  render() {
+    // if (this.props.loading.models.goods) {
+    //   return <div>加载中...</div>;
+    // }
+    return (
+      <div>
+        {/* 分类标签 */}
+        <TagSelect onChange={this.tagSelectChange} value={this.state.tags}>
+          {this.props.tags.map(tag => {
+            return (
+              <TagSelect.Option key={tag} value={tag}>
+                {tag}
+              </TagSelect.Option>
+            );
+          })}
+        </TagSelect>
+        {/* 商品列表 */}
+        <Row type="flex" justify="start">
+          {this.state.displayCourses.map((item, index) => {
+            return (
+              // span=6表示4列
+              <Col key={index} style={{ padding: 8 }} span={6}>
+                {item.name ? (
+                  <Card
+                    extra={
+                      <Icon
+                        onClick={e => this.addCart(e, item)}
+                        type="shopping-cart"
+                        style={{ fontSize: 18 }}
+                      />
+                    }
+                    onClick={() => this.toDetail(item)}
+                    hoverable
+                    title={item.name}
+                    cover={<img src={"/course/" + item.img} />}
+                  >
+                    <Card.Meta
+                      description={
+                        <div>
+                          <span>￥{item.price}</span>
+
+                          <span style={{ float: "right" }}>
+                            <Icon type="user" /> {item.solded}
+                          </span>
+                        </div>
+                      }
+                    />
+                    <div />
+                  </Card>
+                ) : (
+                  <Skeleton active={true} />
+                )}
+              </Col>
+            );
+          })}
+        </Row>
+      </div>
+    );
+  }
+}
+export default Goods;
+
+
+// export default Goods;
+
+// export default connect(
+//    state => ({
+//      goodsList: state.goods,//获取指定命名空间的模型状态
+//      loading:state.loading}),
+//   {
+//     addGood:title => ({
+//       type:'goods/addGood',
+//       payload:title
+//     }),
+//     getLists: ()=>({
+//       type:'goods/getLists'
+//     })
+//   }
+// )(function({goodsList,addGood,getLists,loading}) {
+//   useEffect(()=>{
+//     // 实现第一次初始化
+//     getLists()
+//   },[])
+//
+//   console.log(loading)
+//   if (loading.models.goods) {
+//     return <div>加载中</div>
+//   }
+//   return (
+//     <div className={styles.normal}>
+//         <ul>
+//           {goodsList.map(good => (<li key={good.title}>{good.title}</li>))}
+//         </ul>
+//       <button onClick={() => addGood('商品'+new Date().getTime())}>新增</button>
+//     </div>
+//   );
+// })
