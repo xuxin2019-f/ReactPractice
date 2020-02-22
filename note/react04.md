@@ -374,7 +374,21 @@ redux中间件机制
 
 加了之后 dispatch通过appllyMiddleware这个函数形成了一个superDispatch（强化dispatch）,功能强大，然后action=>若干中间件再到store里的reducer
 
+redux中的数据流大致是：
 
+***UI—————>action（plain）—————>reducer——————>state——————>UI\***
+
+**但是如果存在副作用，比如ajax异步请求等等，那么应该怎么做？**
+
+**如果存在副作用函数，那么我们需要首先处理副作用函数，然后生成原始的js对象。如何处理副作用操作，在redux中选择在发出action，到reducer处理函数之间使用中间件处理副作用。**
+
+redux增加中间件处理副作用后的数据流大致如下：
+
+**UI——>action(side function)—>middleware—>action(plain)—>reducer—>state—>UI**
+
+**在有副作用的action和原始的action之间增加中间件处理，从图中我们也可以看出，中间件的作用就是：**
+
+***转换异步操作，生成原始的action，这样，reducer函数就能处理相应的action，从而改变state，更新UI。\***
 
 作业：用redux实现一个小项目
 
