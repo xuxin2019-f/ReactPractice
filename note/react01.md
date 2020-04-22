@@ -178,7 +178,7 @@ class person {
 
     **使用JS创建一个对象，用这个对象，来模拟每个DOM节点，然后在每个DOM节点中，又提供了类似children这样的属性，来描述当前DOM节点的子节点，这样当DOM节点形成了嵌套关系，就模拟出了一颗DOM树**
 
-   ![img](file:///C:\Users\xuxin\AppData\Roaming\Tencent\Users\1263092750\QQ\WinTemp\RichOle\3`B[3_MO7A5`H0T1M216K]D.png)
+   ![虚拟dom](F:\图片\虚拟dom.png)
 
  + DOM和虚拟DOM的区别：
    - DOM是由浏览器中的JS提供功能，所以我们只能人为的使用 浏览器提供的固定的API来操作DOM对象；
@@ -303,7 +303,7 @@ import ReactDOM from 'react-dom'
 
 ## 第一种基本组件的创建方式
 
-在react中，构造函数或者是类就是一个基本的组件
+在react中，**构造函数或者是类就是一个基本的组件**
 
 如果要把组件放到页面中，可以把构造函数或者是类的名称当做组件的名称，以html标签形式引入页面中
 
@@ -440,7 +440,7 @@ class 组件名称 extends React.Component {
 
 # this.setState({})
 
-1.里面可以直接传对象，也可以写一个方法，写方法时要return
+1.里面可以直接传对象，也可以写一个方法，**写方法时要return**
 
 ```
 changeHandler = (e)=> {
@@ -472,6 +472,8 @@ changeHandler = (e)=> {
 2.setState是批量操作的
 
 3.this.setState通常是异步的：
+
+**解决方法是第一个参数不以对象的形式来修改，而是以函数的形式修改**，函数参数(state,props),state代表**上一次更新后**的值，然后在函数里直接通过state.counter来修改，不要再拿this.state.counter修改（可能拿到旧值））
 
 ```
 // 假如couter初始值为0，执行三次以后其结果是多少？

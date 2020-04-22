@@ -740,6 +740,8 @@ export default connect(({ products }) => ({
 }))(Products);
 ```
 
+**这里与umi-test不同，直接写命名空间就好**
+
 最后，我们还需要一些初始数据让这个应用 run 起来。编辑 `src/app.js`：
 
 ```js

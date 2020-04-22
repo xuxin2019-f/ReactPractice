@@ -50,8 +50,10 @@ React生命周期的回调函数总结成表格如下：
 ![React生命周期表格](./images/React生命周期表格.png)
 组件生命周期的执行顺序：
 
+- **initialization**
+- constructor()
+
 + **Mounting**
- - constructor()
  - componentWillMount()
  - render()
  - componentDidMount()
@@ -187,6 +189,104 @@ React生命周期的回调函数总结成表格如下：
 
 
 
+## Hook
+
+**Hook 使用了 JavaScript 的闭包机制，而不用在 JavaScript 已经提供了解决方案的情况下，还引入特定的 React API。**
+
+### useState
+
+### useEffect
+
+#### 解决了class的一些问题
+
+1.如果class要实现首次渲染和每次更新的相同逻辑，要复用代码两次，而useEffect不用
+
+2.class中相关逻辑可能分散在不同的生命周期，不相关逻辑又可能都在一个生命周期，useEffect可以多次声明来解决这个问题
+
+3.class中如果忘记在componentDidUpdate中书写相关数据更新后的操作，很可能会导致页面组件渲染的错误等，利用useEffect中每次首次渲染后都会执行的清除函数会避免这个问题的发生（**并且useEffect可以通过设置第二个参数来优化**）
+
+
+
+
+
+在 React 的 class 组件中，**`render` 函数是不应该有任何副作用的。**一般来说，在这里执行操作太早了，我们基本上都希望在 React 更新 DOM 之后才执行我们的操作。这**就是为什么在 React class 中，我们把副作用操作放到 `componentDidMount` 和 `componentDidUpdate` 函数中**。**如果在class中想实现首次渲染和每次更新都执行相同代码，需要重复写两次代码**
+
+**`useEffect` 做了什么？** 通过使用这个 Hook，你可以告诉 React 组件需要在渲染后执行某些操作。React 会保存你传递的函数（我们将它称之为 “effect”），**并且在执行 DOM 更新之后调用它。**
+
+**为什么在组件内部调用 `useEffect`？** 将 `useEffect` 放在组件内部让我们可以在 effect 中直接访问 `count` state 变量（或其他 props）。我们不需要特殊的 API 来读取它 —— 它已经保存在函数作用域中。**Hook 使用了 JavaScript 的闭包机制，而不用在 JavaScript 已经提供了解决方案的情况下，还引入特定的 React API。**
+
+**`useEffect` 会在每次渲染后都执行吗？** 是的，默认情况下，它在第一次渲染之后*和*每次更新之后都会执行。（我们稍后会谈到[如何控制它](https://zh-hans.reactjs.org/docs/hooks-effect.html#tip-optimizing-performance-by-skipping-effects)。）你可能会更容易接受 effect 发生在“渲染之后”这种概念，不用再去考虑“挂载”还是“更新”。React 保证了每次运行 effect 的同时，DOM 都已经更新完毕。
+
+#### 不需要清除的副作用
+
+不需要return
+
+#### 需要清除的副作用
+
+return一个函数，**React将会在执行清除操作（在每次重新渲染时都会执行）时调用它**
+
+**为什么要在 effect 中返回一个函数？** 这是 effect 可选的清除机制。每个 effect 都可以返回一个清除函数。如此可以将添加和移除订阅的逻辑放在一起。它们都属于 effect 的一部分。
+
+#### 多个effect声明
+
+将不相关的逻辑声明在不同的effect中，react会按照声明的顺序从上到下依次执行，解决了class中不相关的逻辑在一个生命周期里，相关的逻辑又分散在不同的生命周期里的这个问题
+
+
+
+#### 性能优化：使用参数
+
+#### 提示: 通过跳过 Effect 进行性能优化
+
+在某些情况下，每次渲染后都执行清理或者执行 effect 可能会导致性能问题。在 class 组件中，我们可以通过在 `componentDidUpdate` 中添加对 `prevProps` 或 `prevState` 的比较逻辑解决：
+
+```
+componentDidUpdate(prevProps, prevState) {
+  if (prevState.count !== this.state.count) {
+    document.title = `You clicked ${this.state.count} times`;
+  }
+}
+```
+
+这是很常见的需求，所以它被内置到了 `useEffect` 的 Hook API 中。如果某些特定值在两次重渲染之间没有发生变化，你可以通知 React **跳过**对 effect 的调用，只要传递数组作为 `useEffect` 的第二个可选参数即可：
+
+```
+useEffect(() => {
+  document.title = `You clicked ${count} times`;
+}, [count]); // 仅在 count 更改时更新
+```
+
+**如果只写成[]，代表该副作用只在首次渲染时执行**
+
+#### 规则
+
+- 只能在react中用
+- 只能在构造函数组件中用
+- **只能在函数的顶层逻辑用，不能在子函数或者是条件语句中用**
+
+​    原因是：react知道哪个state对应哪个useState是通过每次重新渲染都是同样的Hook调用顺序实现的，如果某一个Hook放在了子函数或者是条件语句中，调用时会忽略这个Hook，导致后面所有的Hook都提前了，产生bug
+
+https://zh-hans.reactjs.org/docs/hooks-rules.html
+
+### useContext
+
+接收一个 context 对象（`React.createContext` 的返回值）并返回该 context 的当前值。当前的 context 值由上层组件中距离当前组件最近的 `的 `value`prop 决定。
+
+当组件上层最近的 ` 更新时，该 Hook 会触发重渲染，并使用最新传递给 `MyContext` provider 的 context `value` 值。即使祖先使用 [`React.memo`](https://zh-hans.reactjs.org/docs/react-api.html#reactmemo) 或 [`shouldComponentUpdate`](https://zh-hans.reactjs.org/docs/react-component.html#shouldcomponentupdate)，也会在组件本身使用 `useContext` 时重新渲染。
+
+别忘记 `useContext` 的参数必须是 *context 对象本身*：
+
+**即首先要用MyContext（自己定义的）=React.createContext创建一个上下文环境，然后在Context.Provider中通过value来传递给子组件，然后子组件中才能使用useContext（MyContext）来获取数据**
+
+### useReducer
+
+一定程度上是useState的替代方案。它接收一个类似于(state,dispatch)=>changestate的reducer作为第一个参数，第二个参数是state的初始值，第三个参数init是选择是否要惰性加载
+
+```
+const [state, dispatch] = useReducer(reducer, initialArg, init);
+```
+
+
+
 ## 高阶组件函数调用（重要
 
 为了提高组件的复用率，就要保证组件功能单一性，若要满足复杂需求就需要扩展功能单一的组件，于是有了HOC高阶组件。高阶组件是一个工厂函数，它接收一个组件并返回另一个组件
@@ -242,6 +342,64 @@ let WrapCommentList = enhance(Fn)
 ```
 
 新版例子在class-tets的HocTest.js中
+
+练习用函数写高阶组件并写成链式调用》commentlist下HocTest
+
+```react
+import React, { Component, useEffect } from 'react'
+function Child(props) {
+  return (
+    <div>
+      {props.num}-{props.count}-{props.data}
+    </div>
+  )
+}
+
+const listdata = [
+  { num: 1, count: 1 },
+  { num: 2, count: 2 },
+  { num: 3, count: 3 },
+]
+// 这个高阶函数实现为子组件添加新的属性
+const withComp = (Comp) => (props) => {
+  const list = listdata[props.index]
+  console.log(props.data)
+  //除了新添加的属性，还要把原来的属性加上呀！
+  return <Comp {...list} data={props.data} />
+}
+
+//这个高阶组件打印日志
+const warpComp = (Comp) => (props) => {
+  // 如果用函数组件就用useEffect，可以代替componentDidMount
+  useEffect(() => {
+    console.log('打印日志')
+  })
+  return <Comp {...props} />
+}
+
+const Lastchild = warpComp(withComp(Child))
+
+export default class HocTest extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: 'data',
+    }
+  }
+  render() {
+    return (
+      <div>
+        {[0, 0, 0].map((item, index) => (
+          <Lastchild data={this.state.data} index={index} />
+        ))}
+      </div>
+    )
+  }
+}
+
+```
+
+
 
 ## 通过原生的方式获取元素并绑定事件
 
