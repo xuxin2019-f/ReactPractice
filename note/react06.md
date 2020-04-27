@@ -222,6 +222,8 @@ dva是一个基于redux和redux-saga的数据流方案，为了简化开发体�
 
 扩展了dva，dva只作为其中的一个小插件
 
+自带antd？？还是要安装
+
 ### umi应用约定目录结构
 
 - pages 页面

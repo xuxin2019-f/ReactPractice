@@ -6509,6 +6509,23 @@ mkdirp@0.5.1, mkdirp@^0.5.1, mkdirp@~0.5.1:
   dependencies:
     minimist "0.0.8"
 
+mobx-react-lite@2:
+  version "2.0.6"
+  resolved "https://registry.npm.taobao.org/mobx-react-lite/download/mobx-react-lite-2.0.6.tgz#e1307a2b271c6a6016c8ad815a25014b7f95997d"
+  integrity sha1-4TB6KyccamAWyK2BWiUBS3+VmX0=
+
+mobx-react@^6.2.2:
+  version "6.2.2"
+  resolved "https://registry.npm.taobao.org/mobx-react/download/mobx-react-6.2.2.tgz#45e8e7c4894cac8399bba0a91060d7cfb8ea084b"
+  integrity sha1-RejnxIlMrIOZu6CpEGDXz7jqCEs=
+  dependencies:
+    mobx-react-lite "2"
+
+mobx@^5.15.4:
+  version "5.15.4"
+  resolved "https://registry.npm.taobao.org/mobx/download/mobx-5.15.4.tgz#9da1a84e97ba624622f4e55a0bf3300fb931c2ab"
+  integrity sha1-naGoTpe6YkYi9OVaC/MwD7kxwqs=
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/move-concurrently/download/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"

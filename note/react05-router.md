@@ -209,7 +209,15 @@ ProductMgt
 
 ## 7.路由守卫
 
-核心思想：通过组件包装Route，得到一个ProvateRoute，为其扩展一个用户鉴权（状态检查）功能
+核心思想：通过组件包装Route，得到一个PrivateRoute，为其扩展一个用户鉴权（状态检查）功能
+
+想要实现的效果：
+
+```
+<PrivateRoute path='/login' component={Login} />
+```
+
+
 
 ```
 // 路由守卫：定义一个PrivateRoute组件
@@ -240,26 +248,40 @@ function PrivateRoute({ component: Component, isLogin, ...rest }) {
 }
 ```
 
+## 8.route中的条件渲染render
+
+在路由守卫中通过条件渲染做了判断，见上面代码
+
+
+
 ## 扩展
 
 ### react-router原理
 
-react-router秉承一切皆组件，因此实现的核心就是BrowserRouter，Router，Link
+react-router秉承一切皆组件，因此实现的核心就是**BrowserRouter，Router，Link**
 
-**BrowserRouter**：将match、历史记录管理对象history、location变更监听**初始化**及向下组件传递（相当于创建了个context上下文）
+
+
+**BrowserRouter**：将match、历史记录管理对象history、location变更监听**初始化**及向下组件传递（相当于创建了个context上下文），**即BrowserRouter的所有子组件都有history、location、match属性。**并展示this.props.children内容
 
 创建MyRouterTest.js,**首先实现BrowserRouter**
 
-创建上下文
+**创建上下文**
+
+
 
 **实现Route组件**
 
 **match的实现是根据pathname（即url）和用户传递的属性（这里应该比较的是传递过来的path属性）获得match对象，需要引用matchPath.js工具**
 
-从this.props中解构出三个函数：children，component，render（条件渲染）（**意思就是如果父组件在调用Route的时候，传递了这三个函数的某一个，则就会被解构出来**），**这三个属性都接收一个函数作为值，都可以接收route的三个参数：history、location、match。优先级：children>component>render**
+从this.props中解构出三个函数：children，component，render（条件渲染）（**意思就是如果父组件在调用Route的时候，传递了这三个函数的某一个，则就会被解构出来**），**这三个属性都接收一个函数作为值，都可以接收route的三个参数：history、location、match。这三者是竞争关系，如果当前url匹配，component和render会执行，但其中children不管是否匹配path都会执行。优先级：children>component>render，children优先级最高，不论匹配与否存在就执行，如果没有children，先检查url和Route里的属性path是否匹配 后面的component和render必须匹配**
 
 如果children是个函数，将history，location，match作为参数传递进去
 
+
+
 **实现Link组件**
 
-从this.props中解构出to作为跳转的属性
+实际上就是扩展a标签的功能
+
+从this.props中解构出to作为href属性的值，当触发点击时通过history.push(this.props.to)来实现跳转

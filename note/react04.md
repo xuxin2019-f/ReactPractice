@@ -22,11 +22,11 @@ redux里的reducers相当于vuex的mutation，并且不应该改之前的值，�
 
 应用中所有的 state 都以一个对象树的形式储存在一个单一的 store 中。 惟一改变 state 的办法是触发 action (**描述如何处理state的对象，即dispatch**)。
 
-为了实现根据 action 的信息来改变 state 树，你需要编写 reducers。
+**为了实现根据 action 的信息来改变 state 树，你需要编写 reducers。**
 
 action 是一个哈希对象
 
-2.store里的reducer（其实就是一个函数，接收一些action，根据不同action进行不同操作）来初始化state并定义state修改规则
+2.store里的reducer（其实就是一个函数，接收一些action，**根据不同action对state进行不同操作）来初始化state并定义state修改规则**
 
 3.改状态：通过dispatch派发一个action来提交对数据的修改
 
@@ -46,7 +46,7 @@ action 是一个哈希对象
 
 2.reducer 初始化、修改状态的函数
 
-3.getState 获取状态值
+3.**getState 获取状态值**
 
 4.dispatch 提交更新 此时页面并不会更新（因为没有重新渲染，不同于vue 的双向数据流）
 
@@ -54,15 +54,38 @@ action 是一个哈希对象
 
 **太麻烦了，所以需要react-redux 的支持**
 
+### 为什么用react-redux代替redux
+
+react、redux、react-redux关系：https://www.jianshu.com/p/728a1afce96d
+
+redux的原理是设置一个createStore函数，在里面定义state作为私有变量，再在函数里通过定义子函数：getState、dispatch、subscribe等实现闭包，来获取和操作私有变量。全局组件的使用都必须要引入store、获取state必须都要getState、派发都要用dispatch、并且每次更新state后必须要调用subscribe实现重新渲染，很麻烦。
+
+我们希望通过把store设置在**react组件的顶层props**上（**即在index.js中引入store，利用context.provider**）比如：
+
+```
+<TopWrapComponent store={store}>
+ <App />
+</TopWrapComponent>,
+```
+
+并让所有的子组件都能访问到即可。**则可以用react中的Context原理**,react-redux提供provider组件
+
+```
+import {Provider} from 'react-redux'
+ReactDOM.render(<Provider store={store}><RouterTestsaga/></Provider>, document.getElementById('root'));
+```
+
+并利用connect高阶组件封装redux中createStore中的子函数，使子组件直接可以**通过props来获取数据和调用callback**，**就像没有store存在一样**
+
 ### react-redux原理
 
 核心任务
 
-实现一个高阶函数工厂connect，可以根据传入状态映射规则函数和派发起映射规则函数映射需要的属性，**可以处理变更监测和刷新任务**
+**实现一个高阶函数工厂connect，可以根据传入状态映射规则函数和派发映射规则函数映射需要的属性**，**可以处理变更监测和刷新任务**
 
 **实现一个Provider组件可以传递store**
 
-包装目的：自动刷新，react-redux替我们执行了subscribe订阅，使我们不需要再订阅
+***包装目的：自动刷新，react-redux替我们执行了subscribe订阅，使我们不需要再订阅***
 
 **详细：简书查得**
 
@@ -103,6 +126,12 @@ const VisibleTodoList = connect()(TodoList);
 上面VisibleTodoList 便是通过UI组件TodoList,通过connect方法自动生成的容器组件。
  但需要定义业务逻辑，组件才有意义。
 
+**注意如果state后定义的是对象形式一定要用()包起来，否则直接识别成jsx了**
+
+```
+connect((state) => ({ isLogin: state.user.login })
+```
+
 
 
 ```javascript
@@ -112,6 +141,13 @@ const VisibleTodoList = connect(
   mapStateToProps,
   mapDispatchToProps
 )(TodoList)
+或写成装饰器形式：
+@connect(state=>({num:1,counter:0}),{add:()=>({type:'add'}),minus:()=>({type:minus})})
+class RedexTest extends Component {
+    render(){
+        return....
+    }
+}
 ```
 
 connect方法接受两个参数：**mapStateToProps和mapDispatchToProps。它们定义了 UI 组件的业务逻辑。前者负责输入逻辑，即将state映射到 UI 组件的参数（props），后者负责输出逻辑，即将用户对 UI 组件的操作映射成 Action**。
@@ -194,13 +230,13 @@ connect需要配置 @connect（stats=>({}),{add: ()=>({type:’add’})})
 
 **第一个参数mapStateToProps**
 
-是状态值（映射到合适的属性上，将来可以通过this.props.属性得到）
+是状态值（**映射到合适的属性上，将来可以通过this.props.属性得到**）
 
 简单来说可以通过this.props拿到这个connect
 
 **第二个参数mapDispatchToProps**
 
-把dispatch映射到属性上
+**把dispatch映射到属性上**
 
 是一个对象，对象里的每个值都是一个函数，每个函数返回一个对象
 
@@ -216,7 +252,46 @@ connect需要配置 @connect（stats=>({}),{add: ()=>({type:’add’})})
 
 ### 异步操作：
 
-安装中间件后
+安装中间件（**在组件和store之间对dispatch进行升级**）后
+
+[常用的这三个中间件的比较](https://blog.csdn.net/weixin_44217741/article/details/88965868?depth_1-utm_source=distribute.pc_relevant.none-task-blog-OPENSEARCH-1&utm_source=distribute.pc_relevant.none-task-blog-OPENSEARCH-1)
+
+**redux-logger**：每次action修改state后都会在控制台打印出prev和next的state值
+
+**redux-thunk**：因为原本action的值是一个对象，不接受函数类型，所以无法实现异步操作。那么在action中实现异步操作的方法是：
+
+```
+{add:()=>dispatch=>{异步操作}}
+```
+
+**即需要返回的是一个函数，通过redux-thunk实现action返回的是一个函数**
+
+注意：**不是redux-thunk实现了异步，而是实现了返回值是一个函数，通过在函数里写异步操作而实现了异步**
+
+**redux-saga**：**底层原理是es6的generator**。解决redux-thunk每一个异步操作都要定义一个action，不易维护，形式不统一，操作太分散等缺陷。**redux-saga单独把异步逻辑分离到另一个文件去管理**（见react06）
+
+
+
+注意：1.`createStore`方法可以接受整个应用的初始状态作为参数，那样的话，`applyMiddleware`就是第三个参数了
+
+​            格式为：
+
+```
+const store = createStore(
+  reducer,
+  initial_state,
+  applyMiddleware(logger)
+);
+```
+
+​            2.中间件的次序有讲究：
+
+```
+const store = createStore(
+  reducer,
+  applyMiddleware(thunk, promise, logger)
+);
+```
 
 在store中的index.js代码变为：
 
@@ -261,9 +336,9 @@ export default store
 })
 ```
 
-代码优化
+### 代码优化（抽离代码）
 
-抽离reducer和action，创建store/counter.js
+**抽离reducer和action**，创建store/counter.js
 
 1.把ReducTest里@connect中的action参数全部放进counter里
 
@@ -335,11 +410,81 @@ createStore暴露了三个接口：分别是getState，dispatch，subscribe
 
 **见store/kredux.js**
 
-1.enhancer相当于强化器
+实现createStore
+
+```js
+export function createStore(reducer,enhancer){
+    if(enhancer){
+        // 如果存在中间件，则强化
+        return enhancer(createStore)(reducer)
+    }
+    //设初始化的state数据为undefined
+    let currentState = undefined
+    //每次变更都要执行的回调函数组
+    const currentListeners = []
+    //获取数据
+    function getState(){
+        return currentState
+    }
+    //变更订阅，参数是一个回调，把这个回调添加到函数组中
+    function subscribe(cb){
+        currentListeners.push(cb)
+    }
+    //派发，实现操作state
+    function dispatch(action){
+        //首先通过reducer来赋值
+        let currentState = reducer(currentState,action)
+        //遍历函数组的每一个函数，全部执行
+        currentListeners.forEach(v=>v)
+        return action
+    }
+    //由于初始currentState为undefined，利用reducer中switch语句的default下的默认state来给currentState赋值，这个时候随便写一个没有的type即可
+    dispatch({type:'2edsa0'})
+    return {
+        getState,
+        subscribe,
+        dispatch
+    }
+}
+```
+
+实现applyMiddleware
+
+```js
+//首先实现将数组中的多个项合并的功能
+export function compose(...fns){
+    if(fns.length === 0){
+        //执行fns里操作
+        return v=>v
+    }
+    if(fns.length === 1){
+        return fns[0]
+    }
+    return fns.reducer((left,right)=>(...args)=>right(left(...args)))
+}
+export function applyMiddleware(...middlewares){
+    return (createStore)=>(...args)=>{
+        const store = createStore(...args)
+        let dispatch = store.dispatch
+        const midApi = {
+            getState:store.getState,
+            dispatch:(...args)=>dispatch(...args)
+        }
+        const chain = middlewares.map((mw=>mw(midApi))
+        dispatch = compose(...chain)(store.dispatch)
+    }
+    return {
+        ...store,
+        dispatch
+    }
+}
+```
+
+1.enhancer相当于强化器，**即中间件**
 
 2.dispatch的参数永远是action，定义dispatch函数时将action返回了，便于中间件的操作
 
-3.强化器的定义函数中定义midApi来给若干中间件传参数dispatch和getState，使所有中间件拥有这两个能力，所以在MyReduxTest中定义的中间件logger和thunk里都可以接受这两个参数。同时，这两个中间件都在最后返回了dispatch(action)，因为在kredux的dispatch函数定义中，最终会返回action，便于下一个中间件的执行
+3.**强化器的定义函数中定义midApi来给若干中间件传参数dispatch和getState，使所有中间件拥有这两个能力，**所以在MyReduxTest中定义的中间件logger和thunk里都可以接受这两个参数。同时，这两个中间件都在最后返回了dispatch(action)，因为在kredux的dispatch函数定义中，最终会返回action，便于下一个中间件的执行
 
 4.MyReduxTest中thunk中间件的定义，判断如果action类型是函数的话，传入两个参数，因此在下面render界面可以直接接收到。
 
@@ -372,7 +517,7 @@ redux中间件机制
 
 不加之前 action=>store.dispatch=>直接到store的若干reducer
 
-加了之后 dispatch通过appllyMiddleware这个函数形成了一个superDispatch（强化dispatch）,功能强大，然后action=>若干中间件再到store里的reducer
+**加了之后 dispatch通过appllyMiddleware这个函数形成了一个superDispatch（强化dispatch）,功能强大，然后action=>若干中间件再到store里的reducer**
 
 redux中的数据流大致是：
 
@@ -394,13 +539,44 @@ redux增加中间件处理副作用后的数据流大致如下：
 
 见class-test/todolist.js
 
+#### redux-logger
+
+```js
+import {applyMiddleware} from '../store/redux'
+
+function logger({getState,dispatch}){
+    return dispatch => action =>{
+        //执行中间件任务
+        console.log(action.type+'执行了')
+        //下一个中间件
+        return dispatch(action)
+    }
+}
+const store = createStore(counterReducer,applyMiddleware(logger))
+```
+
+#### redux-thunk
+
+```js
+function thunk({getState,dispatch}){
+    return dispatch => aciton =>{
+        if(typeof action === 'function'){
+            return action({getState,dispatch})
+        }
+        return dispatch(action)
+    }
+}
+```
+
 
 
 ### react-redux原理
 
 #### 核心任务
 
-实现一个高阶函数工厂connect，可以根据传入状态映射规则函数和派发起映射规则函数映射需要的属性，**可以处理变更检测和刷新任务**
+实现一个**高阶函数工厂connect**，可以根据传入状态映射规则函数和派发起映射规则函数映射需要的属性，**可以处理变更检测和刷新任务**
+
+更新原理：为了解决原生redux的使用：在每个要使用状态的组件都要进行引入，获取状态都要调用getState，并且每次页面更新都要调用subscribe通知订阅，很麻烦。为了解决这个问题，利用react中的Context钩子这一概念，在react-redux中实现了直接在index.js中引入react-redux提供的Provider来把所有的数据和方法传给react的顶层props，**由于connect函数在接收两个映射函数后，返回的是一个高阶函数组件，所以最后所有的子组件可以直接通过props来访问数据和方法**
 
 见pdf
 

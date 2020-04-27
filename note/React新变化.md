@@ -2,9 +2,21 @@
 
 ## React Fiber
 
+![img](https://upload-images.jianshu.io/upload_images/7512510-eab82217abe7dc17.png?imageMogr2/auto-orient/strip|imageView2/2/w/586)
+
+Fiber出现之前：组件同步渲染、深层渲染，堵塞主线程
+
+![img](https://upload-images.jianshu.io/upload_images/7512510-a622b2d69c5bf663.png?imageMogr2/auto-orient/strip|imageView2/2/w/1153)
+
+出现之后：允许异步渲染，将组件的渲染过程分为phase1和phase2，phase1是可以被打断的（只允许做一些无副作用的操作），phase2不能被打断
+
+![img](https://upload-images.jianshu.io/upload_images/7512510-e920709f62c769cb.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/720)
+
 防止了客户端react在进行渲染的时候阻塞页面的其他交互行为
 
 https://zhuanlan.zhihu.com/p/26027085
+
+https://www.jianshu.com/p/bf824722b496
 
 ## 生命周期
 
@@ -21,7 +33,7 @@ https://zhuanlan.zhihu.com/p/26027085
 
 如果开发者开了async rendering，而且又在以上这些render前执行的生命周期方法做AJAX请求的话，那AJAX将被无谓地多次调用。。。明显不是我们期望的结果。而且在componentWillMount里发起AJAX，不管多快得到结果也赶不上首次render，而且componentWillMount在服务器端渲染也会被调用到（当然，也许这是预期的结果），这样的IO操作放在componentDidMount里更合适。
 禁止不能用比劝导开发者不要这样用的效果更好，所以除了shouldComponentUpdate，其他在render函数之前的所有函数（componentWillMount，componentWillReceiveProps，componentWillUpdate）都被getDerivedStateFromProps替代。
-也就是用一个静态函数getDerivedStateFromProps来取代被deprecate的几个生命周期函数，就是强制开发者在render之前只做无副作用的操作，而且能做的操作局限在根据props和state决定新的state
+也就是用一个静态函数getDerivedStateFromProps来取代被deprecate的几个生命周期函数，**就是强制开发者在render之前只做无副作用的操作**，而且能做的操作局限在根据props和state决定新的state
 
 
 

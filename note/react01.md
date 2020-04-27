@@ -438,6 +438,164 @@ class 组件名称 extends React.Component {
 }
 ```
 
+## Refs&DOM
+
+下面是几个适合使用 refs 的情况：
+
+- 管理焦点，文本选择或媒体播放。
+- 触发强制动画。
+- 集成第三方 DOM 库。
+
+常用用法：
+
+创建：this.myRef = React.createRef（）
+
+添加：通过ref属性附加 ref={this.myRef}
+
+访问：this.myRef.current
+
+```react
+import React, { Component } from 'react'
+export default class Parent extends Component {
+  constructor(props) {
+    super(props)
+    this.inputRef = React.createRef()
+  }
+  focus = () => {
+    this.inputRef.current.focus()
+  }
+  render() {
+    return (
+      <div>
+        <input ref={this.inputRef} type="text" />
+        <button onClick={this.focus}>聚焦</button>
+      </div>
+    )
+  }
+}
+```
+
+**注意**
+
+ref 的值根据节点的类型而有所不同：
+
+- 当 `ref` 属性用于 HTML 元素时，构造函数中使用 `React.createRef()` 创建的 `ref` 接收底层 DOM 元素作为其 `current` 属性。
+- 当 `ref` 属性用于自定义 class 组件时，`ref` 对象接收组件的挂载实例作为其 `current` 属性。
+- **你不能在函数组件上使用 `ref` 属性**，因为他们没有实例。但可以在函数组件内部使用ref属性，只要将它指向一个DOM元素或者class组件（**使用useRef**）
+
+```react
+function CustomTextInput(props) {
+  // 这里必须声明 textInput，这样 ref 才可以引用它
+  const textInput = useRef(null);
+
+  function handleClick() {
+    textInput.current.focus();
+  }
+
+  return (
+    <div>
+      <input
+        type="text"
+        ref={textInput} />
+      <input
+        type="button"
+        value="Focus the text input"
+        onClick={handleClick}
+      />
+    </div>
+  );
+}
+函数组件
+import React from 'react';
+
+export default function MyInput(props) {
+    const inputRef = React.useRef(null);
+    React.useEffect(() => {
+        inputRef.current.focus();
+    });
+    return (
+        <input type="text" ref={inputRef} />
+    )
+}
+
+```
+
+#### 回调ref
+
+不同于传递 `createRef()` 创建的 `ref` 属性，你会传递一个函数。这个函数中接受 React 组件实例或 HTML DOM 元素作为参数，以使它们能在其他地方被存储和访问
+
+```react
+import React, { Component } from 'react'
+export default class Parent extends Component {
+  constructor(props) {
+    super(props)
+    // this.inputRef = React.createRef()
+    this.inputRef = null
+  }
+  focus = () => {
+    this.inputRef.focus()
+  }
+  render() {
+    return (
+      <div>
+        {/* {回调ref} */}
+        <input ref={(el) => (this.inputRef = el)} type="text" />
+        <button onClick={this.focus}>聚焦</button>
+      </div>
+    )
+  }
+}
+
+```
+
+React 将在组件挂载时，会调用 `ref` 回调函数并传入 DOM 元素，当卸载时调用它并传入 `null`。在 `componentDidMount` 或 `componentDidUpdate` 触发前，React 会保证 refs 一定是最新的。
+
+你可以在组件间传递回调形式的 refs，就像你可以传递通过 `React.createRef()` 创建的对象 refs 一样。
+
+#### 转发refs
+
+**将 DOM Refs 暴露给父组件**
+
+在极少数情况下，你可能希望在**父组件中引用子节点的 DOM 节点**。通常不建议这样做，因为它会打破组件的封装，但它偶尔可用于触发焦点或测量子 DOM 节点的大小或位置。
+
+虽然你可以[向子组件添加 ref](https://zh-hans.reactjs.org/docs/refs-and-the-dom.html#adding-a-ref-to-a-class-component)，但这不是一个理想的解决方案，因为你只能获取组件实例而不是 DOM 节点。并且，它还在函数组件上无效。
+
+如果你使用 16.3 或更高版本的 React, 这种情况下我们推荐使用 [ref 转发](https://zh-hans.reactjs.org/docs/forwarding-refs.html)。**Ref 转发使组件可以像暴露自己的 ref 一样暴露子组件的 ref**。关于怎样对父组件暴露子组件的 DOM 节点，在 [ref 转发文档](https://zh-hans.reactjs.org/docs/forwarding-refs.html#forwarding-refs-to-dom-components)中有一个详细的例子。
+
+
+
+**refs转发：**
+
+在 Hook 之前，高阶组件(HOC) 和 render `props` 是 React 中复用组件逻辑的主要手段。
+
+尽管高阶组件的约定是将所有的 `props` 传递给被包装组件，但是 `refs` 是不会被传递的，事实上， `ref` 并不是一个 `prop`，和 `key` 一样，它由 React 专门处理。
+
+这个问题可以通过 `React.forwardRef` (React 16.3中新增)来解决。
+
+例子：
+
+```react
+const FancyButton = React.forwardRef((props, ref) => {
+  return <input type="text" ref={ref} {...props} />
+})
+// const inputRef = React.createRef()
+export default function Parent(props) {
+  const inputRef = React.useRef()
+  React.useEffect(() => {
+    //此时inputRef.current指向input
+    console.log(inputRef.current)
+  })
+  return (
+    <div>
+      <FancyButton ref={inputRef} />
+    </div>
+  )
+}
+
+```
+
+
+
 # this.setState({})
 
 1.里面可以直接传对象，也可以写一个方法，**写方法时要return**
