@@ -1,4 +1,10 @@
-## 最核心的api
+## 高阶函数与高阶组件
+
+- react中频繁出现的高阶组件指的是一个组件（类）接收一个组件为参数，然后return一个全新的组件。**高阶组件也是高阶函数**。
+
+- 高阶函数是不止存在于react中的含义，只要满足参数或返回值为函数就可以成为高阶函数，如数组中的map、sort、reducer、filter；promise等
+
+##  最核心的api
 
 React.createElement: 创建虚拟DOM
 
@@ -546,3 +552,297 @@ function shouldUpdate(component, nextProps, nextState, nextContext, callback) {
 在哪里生成的？
 
 react中用jsx语法描述视图，通过babel-loader转译后它们变成React.createElement(...)形式，该函数将生成的vdom来描述真是dom，假如状态变化，vdom则做出响应改变，再通过diff算法对比新旧vdom区别从而做出最终dom操作
+
+# ！Hooks原理（数据结构）
+
+可以见react文件夹下的test文件夹下的一些实现和笔记
+
+好文章:https://github.com/brickspert/blog/issues/26
+
+hooks实现了函数组件的生命状态，最重要的有useState和useEffect
+
+### 待回答的问题
+
+- **为什么只能在函数最外层调用Hook？为什么不要在循环、条件判断或子函数中调用？**
+
+​       因为react会根据hook定义的顺序来放置数据，重新render时又会根据顺序来重新执行，如果放在内层，hook顺序变化，react不会感知
+
+- **自定义的hook是如何影响使用它的函数组件？**
+
+与react自带的hook共用同一个顺序
+
+- **为什么useEffect的第二个参数是空数组时相当于ComponentDidMount，只会执行一次？**
+
+因为它只会在初次渲染时执行一次（hasDepChange这时为true），然后再也不会改变了（hasDepChange为false）
+
+- **“Capture Value” 特性是如何产生的？**
+
+这个特性指的是每次触发副作用时，都会保留触发时刻的state和props，在触发期间（如定时器的延时期间）更改的state和props并不会保留在这次副作用上
+
+例子：https://cloud.tencent.com/developer/article/1607256
+
+```react
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import ReactDOM from "react-dom";
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     alert("count: " + count);
+  //   }, 3000);
+  // }, [count]);
+  const handleClick = useCallback(() => {
+    setTimeout(() => {
+      alert("COUNT" + count);
+    }, 3000);
+  }, [count]);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        增加 count
+      </button>
+      <button onClick={() => setCount(count - 1)}>减少 count</button>
+      <button onClick={() => handleClick()}>显示</button>
+    </div>
+  );
+}
+const rootElement = document.getElementById("root");
+ReactDOM.render(<Example />, rootElement);
+
+```
+
+
+
+   **产生原因**：每次re Render时，都会重新去执行函数组件
+
+   **解决方法**：借助ref类型变量绕过Capture Value
+
+```react
+import React, { useState, useEffect, useCallback,useRef } from "react";
+import ReactDOM from "react-dom";
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     alert("count: " + count);
+  //   }, 3000);
+  // }, [count]);
+  const countRef = useRef(null)
+  const handleClick = useCallback(()=>{
+    setTimeout(()=>{
+     
+      alert('COUNT'+countRef.current)
+    },3000)
+  },[count])
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => {
+        countRef.current = count+1
+        setCount(count + 1)}}>增加 count</button>
+      <button onClick={() => setCount(count - 1)}>减少 count</button>
+     <button onClick={()=>handleClick()}>显示</button>
+    </div>
+  );
+}
+const rootElement = document.getElementById("root");
+ReactDOM.render(<Example />, rootElement);
+```
+
+
+
+1.初步实现useState
+
+```
+var _state
+function useState(initialValue) {
+  _state = _state || initialValue // 第一次没有_state时初始化赋值
+  function setState(newState) {
+    _state = newState
+    render()
+  }
+  return [_state, setState]
+}
+
+```
+
+2.初步实现useEffect
+
+```js
+var _deps //记录上一次的依赖，用于比较依赖是否改变了
+function useEffect(callback, dependencies) {
+  var hasnoDep = !dependencies //判断是否依赖为空
+  // 判断依赖是否改变了：如果没有_deps,说明为第一次或者没有依赖，直接为true，否则遍历dependencies的每一项
+  var hasDepChange = _deps
+    ? !dependencies.every((el, i) => el === _deps[i])
+    : true
+  //  如果依赖不存在，或者依赖发生改变了才执行回调函数
+  if (hasnoDep || hasDepChange) {
+    callback()
+    // 记录上一次依赖
+    _deps = dependencies
+  }
+}
+// Q：为什么第二个参数是空数组，相当于 componentDidMount ？
+// A：因为依赖一直不变化，callback 不会二次执行。
+
+```
+
+3.出现的问题：
+
+到现在为止，我们已经实现了可以工作的 useState 和 useEffect。但是有一个很大的问题：它俩都只能使用一次，因为只有一个 _state 和 一个 _deps。比如
+
+
+
+```
+const [count, setCount] = useState(0);
+const [username, setUsername] = useState('fan');
+```
+
+
+
+count 和 username 永远是相等的，因为他们共用了一个 _state，并没有地方能分别存储两个值。我们需要可以存储多个 _state 和 _deps。
+
+
+
+如 《[React hooks: not magic, just arrays](https://medium.com/@ryardley/react-hooks-not-magic-just-arrays-cd4f1857236e)》所写，我们可以使用数组，来解决 Hooks 的复用问题。
+
+
+
+demo6：https://codesandbox.io/s/50ww35vkzl
+
+
+
+代码关键在于：
+
+
+
+1. 初次渲染的时候，按照 useState，useEffect 的顺序，把 state，deps 等按顺序塞到 memoizedState 数组中。
+2. 更新的时候，按照顺序，从 memoizedState 中把上次记录的值拿出来。
+3. 如果还是不清楚，可以看下面的图。
+
+
+
+```
+let memoizedState = []; // hooks 存放在这个数组
+let cursor = 0; // 当前 memoizedState 下标
+
+function useState(initialValue) {
+  memoizedState[cursor] = memoizedState[cursor] || initialValue;
+  const currentCursor = cursor;
+  function setState(newState) {
+    memoizedState[currentCursor] = newState;
+    render();
+  }
+  return [memoizedState[cursor++], setState]; // 返回当前 state，并把 cursor 加 1
+}
+
+function useEffect(callback, depArray) {
+  const hasNoDeps = !depArray;
+  const deps = memoizedState[cursor];
+  const hasChangedDeps = deps
+    ? !depArray.every((el, i) => el === deps[i])
+    : true;
+  if (hasNoDeps || hasChangedDeps) {
+    callback();
+    memoizedState[cursor] = depArray;
+  }
+  cursor++;
+}
+```
+
+
+
+我们用图来描述 memoizedState 及 cursor 变化的过程。
+
+
+
+**1. 初始化**
+
+
+
+
+ [![1](https://user-images.githubusercontent.com/12526493/56090138-6871ae80-5ed0-11e9-8ffe-2056411a19d3.png)](https://user-images.githubusercontent.com/12526493/56090138-6871ae80-5ed0-11e9-8ffe-2056411a19d3.png)
+
+
+
+**2. 初次渲染**
+
+
+
+[![2](https://user-images.githubusercontent.com/12526493/56090141-71628000-5ed0-11e9-9ac9-3a766be35941.png)](https://user-images.githubusercontent.com/12526493/56090141-71628000-5ed0-11e9-9ac9-3a766be35941.png)
+
+
+
+**3. 事件触发**
+
+
+
+[![3](https://user-images.githubusercontent.com/12526493/56090143-745d7080-5ed0-11e9-8d05-c66053a15b63.png)](https://user-images.githubusercontent.com/12526493/56090143-745d7080-5ed0-11e9-8d05-c66053a15b63.png)
+
+
+
+**4. Re Render**
+
+[![4](https://user-images.githubusercontent.com/12526493/56090147-78898e00-5ed0-11e9-8b8c-8768c7651044.png)](https://user-images.githubusercontent.com/12526493/56090147-78898e00-5ed0-11e9-8b8c-8768c7651044.png)
+
+### hooks实际原理
+
+React 中是通过类似**单链表**的形式来代替数组的。通过 next 按顺序串联所有的 hook。
+
+```js
+type Hooks = {
+	memoizedState: any, // 指向当前渲染节点 Fiber
+  baseState: any, // 初始化 initialState， 已经每次 dispatch 之后 newState
+  baseUpdate: Update<any> | null,// 当前需要更新的 Update ，每次更新完之后，会赋值上一个 update，方便 react 在渲染错误的边缘，数据回溯
+  queue: UpdateQueue<any> | null,// UpdateQueue 通过
+  next: Hook | null, // link 到下一个 hooks，通过 next 串联每一 hooks
+}
+ 
+type Effect = {
+  tag: HookEffectTag, // effectTag 标记当前 hook 作用在 life-cycles 的哪一个阶段
+  create: () => mixed, // 初始化 callback
+  destroy: (() => mixed) | null, // 卸载 callback
+  deps: Array<mixed> | null,
+  next: Effect, // 同上 
+};
+```
+
+# ！Fiber原理
+
+fiber之前，react是同步渲染，如果层级过深，容易造成堵塞主线程
+
+而fiber实现异步渲染，将组件的渲染过程分为两个部分：reconciliation Phase 和Commit Phase
+
+Reconciliation Phase的任务干的事情是，找出要做的更新工作（Diff Fiber Tree），就是一个计算阶段，计算结果可以被缓存**，也就可以被打断**；Commmit Phase 需要提交所有更新并渲染，为了防止页面抖动，**被设置为不能被打断**。
+
+**fiber的数据结构：**
+
+1.**fiber实际上是一个链表，有child、sibling、return属性**。
+
+-  child指向第一个子节点
+-  sibling指向第一个兄弟节点
+-  return指向parent节点
+
+2.更新队列，`updateQueue`，是一个链表，有`first`和`last`两个属性，指向第一个和最后一个`update`对象。[详见源码](https://github.com/facebook/react/blob/v16.3.2/packages/react-reconciler/src/ReactFiberUpdateQueue.js#L49)。
+
+3.每个fiber有一个属性`updateQueue`指向其对应的更新队列。
+
+4.每个fiber（当前fiber可以称为`current`）有一个属性`alternate`，开始时指向一个自己的clone体，`update`的变化会先更新到`alternate`上，当更新完毕，`alternate`替换`current`。
+
+![这里写图片描述](https://img-blog.csdn.net/20180428113734143?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FpcWluZ2ppbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+### 中心思想
+
+保留一个指向当前被处理fiber node的**引用**，随着深度优先的向下遍历，不断地修正这个引用，直到遍历触及到这个树分支的叶子节点。一旦到底，再通过return字段层层地返回到上一层的parent fiber node上去

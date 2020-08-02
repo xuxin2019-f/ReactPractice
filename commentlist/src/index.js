@@ -49,4 +49,33 @@ const jsx = (
   </div>
 )
 console.log(jsx)
-ReactDOM.render(jsx, document.getElementById('root'))
+
+class Testone extends Component {
+  constructor() {
+    super()
+    this.state = {
+      count: 0,
+    }
+  }
+  add() {
+    this.setState({ count: this.state.count + 1 }, () => {
+      console.log(this.state.count)
+    })
+    this.setState({ count: this.state.count + 1 }, () => {
+      console.log(this.state.count)
+    })
+  }
+  render() {
+    console.log(this.state.count)
+    return (
+      <div>
+        {this.state.count}
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+          添加
+        </button>
+      </div>
+    )
+  }
+}
+// ReactDOM.render(jsx, document.getElementById('root'))
+ReactDOM.render(<Testone />, document.getElementById('root'))

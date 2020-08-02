@@ -12,9 +12,36 @@
 
 redux里的reducers相当于vuex的mutation，并且不应该改之前的值，而是返回一个完全全新的值
 
+# Flux思想
 
+Flux是一种思想，把一个应用分为4个部分：
+
+-  View 视图（vue、react...），根据store里的数据的改变而改变
+-  store 存储数据 Flux规定一个应用可以有多个store
+-  Dispatcher接收action转发给store来进行数据的修改
+-  action  view中通过触发action来修改store里的数据
+
+![image.png | center | 827x250](https://user-gold-cdn.xitu.io/2018/12/18/167c11c13ef4e9a8?imageView2/0/w/1280/h/960/ignore-error/1)
+
+**Flux最大的特点就是数据都是单向流动的，组件不允许直接修改属于store实例的state，必须通过action来修改，而store里的state的改变也只能通过action**
 
 ## redux上手
+
+### ！ redux的设计思想
+
+1.**单向数据流**：这一点和**Flux架构**如出一辙，要做到可预测，单向的数据流无疑是最保险的
+
+2**.全局只有一个store**：redux认为单一的store可以将数据集中起来，更加方便管理和预测，而且redux认为store的唯一职责就是集中的存储状态，不需要做太多的操作
+
+3.**读写分离**：这个思想可能是redux的核心，**状态是只读的**，你可以通过`store.getState()`读取，至于写这方面，redux摒弃了Flux的dispatcher的概念，取而代之的是reducer，reducer在createStore的时候作为参数传进去，这样就实现了读写分离
+
+4.**reducer必须是纯函数**：如果改变状态的函数太复杂，那么状态管理肯定就不直观，还预测个锤子，所以这就是为什么Redux一直强调reducer必须是纯函数了，**但是实际业务肯定没这么顺利，至少会有请求数据吧，redux会认为这个是副作用，不归reducer管，但问题总要解决的，答案就是Middleware**
+
+5.Middleware: **redux认为，通知reducer改变状态的唯一方式就是dispatch(action),为了解决副作用的问题，redux巧妙地引入了Middleware的概念**，**大概的逻辑就是允许用户在触发了dispatch(action)后到reducer更改状态之前的期间进行拦截，对action进行预处理，类似于管道拼接，**为了可预测，redux期望管道职责单一，且对于管道的拼接顺序是有要求的，比如**日志打印管道必须放在异步处理等管道之后（即拼接中间件时redux-logger要在redux-thunk之后）**，这样地设计解决了副作用的问题，又解决了扩展性的问题
+
+
+
+
 
 需要学习很多概念，以一个累加器举例
 
@@ -46,11 +73,21 @@ action 是一个哈希对象
 
 2.reducer 初始化、修改状态的函数
 
-3.**getState 获取状态值**
+3.**getState 获取状态值(store.getState())**
 
-4.dispatch 提交更新 此时页面并不会更新（因为没有重新渲染，不同于vue 的双向数据流）
+4.dispatch 提交更新 **此时页面并不会更新（因为没有重新渲染，不同于vue 的双向数据绑定，要实现页面的更新必须要subscribe订阅render函数）**
 
-5.subscribe 变更订阅（实现强迫性重新渲染
+**5.subscribe 变更订阅（实现强迫性重新渲染**
+
+   **subscribe这个函数是用来订阅store的变化的，比如每次对store进行dispatch更改state，都会触发subscribe注册的函数调用（如store.subscribe(listen), function listen(){xxx},这里的listen函数就是subsc注册的调用函数）**
+
+
+
+   **那么为了使redux和react连接在一起，需要：**
+
+-    **把store.dispatch方法传递给组件使其内部可以调用**
+-    **subscribe订阅render函数，实现每次修改都重新渲染**
+-    redux的相关内容移到单独的文件中
 
 **太麻烦了，所以需要react-redux 的支持**
 
@@ -58,7 +95,7 @@ action 是一个哈希对象
 
 react、redux、react-redux关系：https://www.jianshu.com/p/728a1afce96d
 
-redux的原理是设置一个createStore函数，在里面定义state作为私有变量，再在函数里通过定义子函数：getState、dispatch、subscribe等实现闭包，来获取和操作私有变量。全局组件的使用都必须要引入store、获取state必须都要getState、派发都要用dispatch、并且每次更新state后必须要调用subscribe实现重新渲染，很麻烦。
+redux的原理是设置一个createStore函数，在里面定义state作为私有变量，再在函数里通过定义**子函数**：getState、dispatch、subscribe等**实现闭包**，**来获取和操作私有变量**。**全局组件的使用都必须要引入store、获取state必须都要getState、派发都要用dispatch、并且每次更新state后必须要触发subscribe实现重新渲染，很麻烦。**
 
 我们希望通过把store设置在**react组件的顶层props**上（**即在index.js中引入store，利用context.provider**）比如：
 
@@ -81,9 +118,9 @@ ReactDOM.render(<Provider store={store}><RouterTestsaga/></Provider>, document.g
 
 核心任务
 
-**实现一个高阶函数工厂connect，可以根据传入状态映射规则函数和派发映射规则函数映射需要的属性**，**可以处理变更监测和刷新任务**
+- **实现一个高阶函数工厂connect，可以根据传入状态映射规则函数和派发映射规则函数映射需要的属性**，**可以处理变更监测和刷新任务**
 
-**实现一个Provider组件可以传递store**
+- **实现一个Provider组件可以传递store**
 
 ***包装目的：自动刷新，react-redux替我们执行了subscribe订阅，使我们不需要再订阅***
 
@@ -244,9 +281,9 @@ connect需要配置 @connect（stats=>({}),{add: ()=>({type:’add’})})
 
 如果没有第二个参数，connect自动会定义dispatch，然后从store里查询type
 
-所以只能用this.props.dispatch.action.type来设置
+所以只能用this.props.dispatch.(action.type)来设置
 
-如果有第二个参数,直接用this.props.action.type来设置
+如果有第二个参数,直接用this.props.(action.type)来设置
 
 
 
@@ -256,9 +293,15 @@ connect需要配置 @connect（stats=>({}),{add: ()=>({type:’add’})})
 
 [常用的这三个中间件的比较](https://blog.csdn.net/weixin_44217741/article/details/88965868?depth_1-utm_source=distribute.pc_relevant.none-task-blog-OPENSEARCH-1&utm_source=distribute.pc_relevant.none-task-blog-OPENSEARCH-1)
 
+**注意安装中间件后需要在applyMiddleware中开启**
+
 **redux-logger**：每次action修改state后都会在控制台打印出prev和next的state值
 
-**redux-thunk**：因为原本action的值是一个对象，不接受函数类型，所以无法实现异步操作。那么在action中实现异步操作的方法是：
+**redux-thunk**：**因为原本action的值是一个对象，不接受函数类型，所以无法实现异步操作。**那么在action中实现异步操作的方法是：
+
+import thunk from 'redux-thunk'
+
+const store = createStore(CounterReducer, applyMiddleware(thunk))
 
 ```
 {add:()=>dispatch=>{异步操作}}
@@ -389,15 +432,395 @@ const store = createStore(
 @connect(state=>({num:state.counter}),
 ```
 
+## Mobx
+
+### ！！原理
+
+-   mobx中**可以实现多个store**，核心概念有state数据状态、derivations（分为computed和reactions副作用）衍生、actions改变状态的函数。
+
+-   mobx通过暴露mobx.observable(或简写成@observable 变量xxx)来创建**可观察的state**
+
+  - observable实际上是**函数createObservable**的引用，这个函数本身不提供转换功能，只是起到转发的作用，通过判断传入的对象类型（装饰器模式、Object、Array、Map）转发给具体的转换函数：
+
+    ![trend](https://segmentfault.com/img/remote/1460000015894699?w=640&h=218)
+
+  - 再利用函数是特殊的对象这一特性将**observableFactories这个对象**的属性遍历的挂在observable的属性下，通过看源码发现这个对象里的方法基本都是对应与createObservable中判断类型后对应的调用方法，如：deepDecorator、object、array、map、box等
+
+  **注意！**
+
+  1. **Mobx4是根据Object.defineProperty实现观察者，Mobx5而替换成了Proxy的写法，但大致思想一致**
+
+  ​    2.mobx在很多框架中都可以使用，如果在react中使用结合mobx-react使用
+
+     
+
+https://www.zcfy.cc/article/mobx-ten-minute-introduction-to-mobx-and-react-4306.html?t=new
+
+上手：
+
+- **@observable** 监听数据
+
+- Action：定义改变状态的动作函数，包括如何变更状态；
+
+
+- Store：集中管理模块状态（State）和动作（action）；
+
+
+- Derivation（衍生）：从应用状态中派生而出，且没有任何其他影响的数据，我们称为derivation（衍生），衍生在以下情况下存在：
+
+
+1. 用户界面；
+
+2. 衍生数据；
+
+   衍生主要有两种：
+
+   1. Computed Values（计算值）：计算值总是可以使用纯函数（pure function）从当前可观察状态中获取；**相当于vue中的computed**
+   
+   ​         @computed get xxx() {
+   
+   ​             return xxxx 
+   
+   ​          }
+   
+      2.Reactions（反应）（autorun）：反应指状态变更时需要自动发生的副作用，这种情况下，我们需要实现其读写操作；**相当于vue中的watch**
+   
+   ​               **mobx.autorun(()=>{})创建一个响应（reaction）并执行一次，之后这个函数中任何observable数据变更时，相应都会被自动执行。**
+
+![Mobx Philosophy](https://user-gold-cdn.xitu.io/2018/2/11/1618360a9dd4583e?imageView2/0/w/1280/h/960/ignore-error/1)
+
+### Mobx-react 
+
+#### Observer
+
+是mobx-react包单独提供的 **Observer是用来将React组建转变成响应式**（**你不再需要调用 `setState`，也不必考虑如何通过配置选择器或高阶组件来订阅应用程序 state 的适当部分。**）的组件，**内部通过mobx.autorun包装了组件的 render函数，来确保store的数据更新时来刷新组件** @observer 是observer(**class** {})的注解形式，用来观察组件
+
+***注意：@observable是属于mobx的，@observer是属于Mobx-react的***
+
+
+
+ **高阶组件  @observer classTest extends React.Component{}**
+
+ **无状态组件 const Test = observer(() => <div>test</div>)**
+
+#### Provider                
+
+```
+Provider函数为connect函数提供store参数，本身connect函数就是用来连接视图和数据层的方法。
+
+在跟组件外层包一层provider，使得所有的子组件默认都可以拿到state
+
+使用：
+
+import { Provider } from 'mobx-react';
+import store from '../stores';
+
+<Provider {...store}>
+    ...
+</Provider>
+```
+
+#### inject               
+
+```
+引入数据的方式，@inject(stores); 使得数据被自动保存在组件的this.props中
+eg:
+@inject('testStore')
+@observer class Test extends React.Component{} 
+```
+
+#### componentWillReact
+
+```
+mobx-react新增的生命周期钩子，当组件重新render的时候会被触发，但在初始渲染前是不会被触发的
+```
+
+#### onError
+
+```
+mobx-react提供的错误钩子函数来收集错误
+
+用法： 
+
+import { onError } from 'mobx-react';
+onError((error) => {
+    consol.log(error);
+})
+```
+
+例子：
+
+```js
+import React from 'react'
+import { observable, configure, action, computed, autorun } from 'mobx'
+import { observer } from 'mobx-react'
+// 不再用useStrict了
+configure({ enforceActions: true })
+
+class MyState {
+  @observable num = 0
+  @action addNum = () => {
+    this.num++
+  }
+  @computed get nownum() {
+    return this.num * 3
+  }
+  constructor() {
+    autorun(() => console.log(this.num))
+  }
+}
+
+const newState = new MyState()
+
+export default
+@observer
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <p>{newState.num}</p>
+        <button onClick={newState.addNum}>+1</button>
+      </div>
+    )
+  }
+}
+
+```
+
+另一个例子
+
+**在这个例子中，通过创建的assignee属性与另一个store关联在了一起**
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { observable, configure, action, computed, autorun } from 'mobx'
+import { observer, inject, Provider } from 'mobx-react'
+import './index.css'
+import App from './App'
+import * as serviceWorker from './serviceWorker'
+import Test from './Test'
+
+class ObservableTodoStore {
+  @observable todos = []
+  @observable pendingRequests = 0
+
+  constructor() {
+    autorun(() => console.log(this.report))
+  }
+
+  @computed get completedTodosCount() {
+    return this.todos.filter((todo) => todo.completed === true).length
+  }
+
+  @computed get report() {
+    if (this.todos.length === 0) return '<none>'
+    return (
+      `Next todo: "${this.todos[0].task}". ` +
+      `Progress: ${this.completedTodosCount}/${this.todos.length}`
+    )
+  }
+
+  @action addTodo(task) {
+    this.todos.push({
+      task: task,
+      completed: false,
+      assig: null,
+    })
+  }
+}
+
+const observableTodoStore = new ObservableTodoStore()
+
+observableTodoStore.addTodo('read MobX tutorial')
+observableTodoStore.addTodo('try MobX')
+observableTodoStore.todos[0].completed = true
+observableTodoStore.todos[1].task = 'try MobX in own project'
+observableTodoStore.todos[0].task = 'grok MobX tutorial'
+
+var peopleStore = observable([{ name: 'Michel' }, { name: 'Me' }])
+observableTodoStore.todos[0].assig = peopleStore[0]
+observableTodoStore.todos[1].assig = peopleStore[1]
+peopleStore[0].name = 'Michel Weststrate'
+
+@inject('observableTodoStore')
+@observer
+class TodoList extends React.Component {
+  render() {
+    return (
+      <div>
+        {this.props.observableTodoStore.report}
+        <ul>
+          {this.props.observableTodoStore.todos.map((todo, idx) => (
+            <TodoView todo={todo} key={idx} />
+          ))}
+        </ul>
+        {this.props.observableTodoStore.pendingRequests > 0 ? (
+          <marquee>Loading...</marquee>
+        ) : null}
+        <button onClick={this.onNewTodo}>New Todo</button>
+        <small> (double-click a todo to edit)</small>
+      </div>
+    )
+  }
+
+  onNewTodo = () => {
+    // const store = observableTodoStore
+    this.props.observableTodoStore.pendingRequests++
+    setTimeout(() => {
+      this.props.observableTodoStore.addTodo(
+        prompt('Enter a new todo', 'coffee plz')
+      )
+      this.props.observableTodoStore.pendingRequests--
+    }, 1000)
+  }
+}
+
+@observer
+class TodoView extends React.Component {
+  render() {
+    const todo = this.props.todo
+    return (
+      <li onDoubleClick={this.onRename}>
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={this.onToggleCompleted}
+        />
+        {todo.task + '-----'}
+        {todo.assig ? <small>{todo.assig.name}</small> : null}
+      </li>
+    )
+  }
+
+  onToggleCompleted = () => {
+    const todo = this.props.todo
+    todo.completed = !todo.completed
+  }
+
+  onRename = () => {
+    const todo = this.props.todo
+    todo.task = prompt('Task name', todo.task) || todo.task
+  }
+}
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider observableTodoStore={observableTodoStore}>
+      <TodoList />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+)
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister()
+
+```
+
+### 
+
+### 坑
+
+1.网上查的老版的mobx严格模式的写法都是
+
+```
+import {useStrict} from 'mobx'
+useStrict(true)
+```
+
+新版用这个就报错，改成
+
+```
+import { configure } from 'mobx'
+configure({ enforceActions: true })
+```
+
+2.严格模式下在store里对数据的操作必须要以action的形式，比如
+
+```
+ @action addTodo(task) {
+    this.todos.push({
+      task: task,
+      completed: false,
+      assignee: null,
+    })
+  }
+  而不能写成
+  addTodo(task) {
+    this.todos.push({
+      task: task,
+      completed: false,
+      assignee: null,
+    })
+  }报错
+```
+
+3.当在父组件外用inject将store作为props传进来时，子组件如果没有inject就会报错，正确的做法是在react最外层组件或者父组件外面加一层Provider
+
+```js
+import { observer, inject, Provider } from 'mobx-react'
+
+@inject('observableTodoStore')
+@observer
+class TodoList extends React.Component {}
+
+@observer
+class TodoView extends React.Component {}
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider observableTodoStore={observableTodoStore}>
+      <TodoList />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+)
+
+```
+
+
+
+# ！！Mobx与redux与vuex
+
+1、**对比Redux**  conponent-->dispatch(action)-->reducer-->subscribe-->getState-->component  
+
+**对比React-Redux**  component-->actionCreator(data)-->reducer-->component 
+
+这里的reducer**在MobX里都给了action，直接通过action来更改状态**，不需要reducer来操作state了，也不需关注reducer纯不纯了 
+
+- 且redux对ts支持不友好，mobx完美支持ts
+- redux和react-redux都需要reducer定义不同action对state的操作，mobx中没有
+
+- redux引入中间件来解决异步，也可以通过约定晚上许多复杂的工作，mobx没有中间件机制。
+- redux中只有一个store，可以有多个reducer，而mobx中存在多个独立的store，没有reducer
+- redux需要手动追踪所有状态对象的变更（getState），mobx中是**监听可观察对象（observable）**，变更时自动触发监听
+- **redux中状态是不可变的，即无法直接操作状态对象，必须是在原来状态对象基础上返回一个新的状态对象（如case add: return num:num+1),而mobx中可以直接操作状态对象**
+- **redux和react连接时，需要用到react-redux提供的provider和connect，provider将store注入react应用，connect将store的state和action注入容器组件，并作为props传递；mobx而言，使用mobx-react的provider将store注入应用，用inject将特定store注入某组件，然后利用observer保证组件能响应store中的可观察对象（observable）变更，实现响应式更新**
+
+当应用公共状态的组件在状态发生变化的时候，会自动完成与状态相关的所有事情，例如自动更新View,自动缓存数据，自动通知server等。 **例如React的体系，react + redux + react-redux + redux-saga, view层触发一个action，中间件会将这个动作进行dispatch，然后reducer执行相应的更新状态方法**，使得store的状态更新。
+
+**在react中，数据流不复杂的情况下使用mobx，如果及其复杂，使用redux**
+
+2、**对比Vuex** component-->dispatch(action)-->mutation--(mutate)-->state-->component vuex中提出了同步mutation和异步action，
+
+现在mobx也无需mutaiton，但借鉴了computed这个纯函数。 相比这两个工具，MobX内置了数据变化监听机制，使得在实际应用的时候一切都是那么的顺其自然。
+
 
 
 ## 扩展
+
+
 
 ### redux原理
 
 手写原理 实现createStore
 
 createStore暴露了三个接口：分别是getState，dispatch，subscribe
+
+ 
 
 #### 核心实现
 
@@ -411,6 +834,8 @@ createStore暴露了三个接口：分别是getState，dispatch，subscribe
 **见store/kredux.js**
 
 实现createStore
+
+**第一个参数可以是combineReducer，第二个参数就是applyMiddleware**
 
 ```js
 export function createStore(reducer,enhancer){
@@ -575,6 +1000,77 @@ function thunk({getState,dispatch}){
 #### 核心任务
 
 实现一个**高阶函数工厂connect**，可以根据传入状态映射规则函数和派发起映射规则函数映射需要的属性，**可以处理变更检测和刷新任务**
+
+- Provider利用**react的context和this.props.children插槽**，从最外部封装了整个应用，将store和store中的数据全部传递给各个组件（**此时组件可以通过this.context.store拿到Provider提供的所有属性**），并向connect模块传递store，接收到状态改变时更新store
+
+```js
+//Provider本质上是一个react组件,简易实现
+class Provider extends React.Component{
+    constructor(props){
+        super(props)
+        const {store} = props
+        this.state = {
+            storeState:store.getState(),
+            store
+        }
+    }
+    xxxxx
+    render(){
+        const Context = this.props.context
+        return (
+         <Context.Provider store={this.state} >
+            {this.props.children}
+         </Context.Provider>
+         )
+    }
+}
+
+```
+
+
+
+- connect接收状态映射函数和派发映射规则，并返回一个高阶函数组件，在最后返回的组件内从this.context解构出store，然后通过store执行store.subscribe()、store.getState()和store.dispatch等操作，最后将这两个规则函数计算后的值映射到props上，在这个最后返回的组件上通过赋予{...this.state.props}将**mapStateToProps和mapDispatchToProps全部映射成该组件的props属性，此时组件可以通过this.props.xxx拿到store中的数据了。**
+
+```js
+// connect本身是个高阶函数工厂，接收StateToProps和mapDispatchToProps后返回一个高阶组件，这个高阶组件内部最后返回一个新生成的组件，在这个组件上赋予props
+//简易实现：
+  const connect = (mapStateToProps = state=>state,mapDispatchTopROPS = {}) =>(WrapComponent) => {
+      return class ConnectComponent extends React.Component{
+          constructor(props,context){
+              super(props，context)
+              this.state = {
+                  props:{}
+              }
+          }
+          componentDidMount(){
+              //解构出store
+              const {store} = this.context
+              //订阅update,自动重新渲染
+              store.subscrbe(()=>this.update())
+              this.update()
+          }
+          update(){
+              //解构出store
+              const {store} = this.context
+              const stateProps = mapStateToProps(store.getState())
+              const dispatchProps = 
+                    //这是额外定义的一个函数，实现将actionCreator转换为派发函数
+                    bindActionCreators(mapDiapatchToProps,store.dispatch)
+              
+              this.setState({
+                  props:{
+                      ...this.state.props,
+                      ...stateProps,
+                      ...dispatchProps
+                  }
+              })
+          }
+          render(){
+              return <WrapComponent {...this.state.props} />
+          }
+      }
+  }
+```
 
 更新原理：为了解决原生redux的使用：在每个要使用状态的组件都要进行引入，获取状态都要调用getState，并且每次页面更新都要调用subscribe通知订阅，很麻烦。为了解决这个问题，利用react中的Context钩子这一概念，在react-redux中实现了直接在index.js中引入react-redux提供的Provider来把所有的数据和方法传给react的顶层props，**由于connect函数在接收两个映射函数后，返回的是一个高阶函数组件，所以最后所有的子组件可以直接通过props来访问数据和方法**
 

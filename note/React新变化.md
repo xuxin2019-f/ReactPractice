@@ -1,10 +1,10 @@
-## React新变化
+# React新变化
 
-## React Fiber
+## 1.React Fiber
 
 ![img](https://upload-images.jianshu.io/upload_images/7512510-eab82217abe7dc17.png?imageMogr2/auto-orient/strip|imageView2/2/w/586)
 
-Fiber出现之前：组件同步渲染、深层渲染，堵塞主线程
+Fiber出现之前：组件同步渲染（因为react是单线程）、深层递归渲染，堵塞主线程
 
 ![img](https://upload-images.jianshu.io/upload_images/7512510-a622b2d69c5bf663.png?imageMogr2/auto-orient/strip|imageView2/2/w/1153)
 
@@ -18,7 +18,7 @@ https://zhuanlan.zhihu.com/p/26027085
 
 https://www.jianshu.com/p/bf824722b496
 
-## 生命周期
+## 2.生命周期
 
 官方文档：https://zh-hans.reactjs.org/docs/react-component.html
 
@@ -27,13 +27,13 @@ https://www.jianshu.com/p/bf824722b496
 因为render渲染之前可能会出现的生命周期有：
 
 - componentWillmount（即将过期）
-- componentWillRecieveProps
-- shouldComponentUpd（即将过期）
+- componentWillRecieveProps（即将过期）
+- shouldComponentUpd
 - componentWillUpda（即将过期）
 
-如果开发者开了async rendering，而且又在以上这些render前执行的生命周期方法做AJAX请求的话，那AJAX将被无谓地多次调用。。。明显不是我们期望的结果。而且在componentWillMount里发起AJAX，不管多快得到结果也赶不上首次render，而且componentWillMount在服务器端渲染也会被调用到（当然，也许这是预期的结果），这样的IO操作放在componentDidMount里更合适。
-禁止不能用比劝导开发者不要这样用的效果更好，所以除了shouldComponentUpdate，其他在render函数之前的所有函数（componentWillMount，componentWillReceiveProps，componentWillUpdate）都被getDerivedStateFromProps替代。
-也就是用一个静态函数getDerivedStateFromProps来取代被deprecate的几个生命周期函数，**就是强制开发者在render之前只做无副作用的操作**，而且能做的操作局限在根据props和state决定新的state
+**如果开发者开了async rendering，而且又在以上这些render前执行的生命周期方法做AJAX请求的话，那AJAX将被无谓地多次调用。。。**明显不是我们期望的结果。而且在componentWillMount里发起AJAX，不管多快得到结果也赶不上首次render，而且componentWillMount在服务器端渲染也会被调用到（当然，也许这是预期的结果），这样的IO操作放在componentDidMount里更合适。
+禁止不能用比劝导开发者不要这样用的效果更好，所以除了shouldComponentUpdate，其他在render函数之前的所有函数（**componentWillMount，componentWillReceiveProps，componentWillUpdate）都被getDerivedStateFromProps替代。**
+也就是用一个**静态函数getDerivedStateFromProps来取代被deprecate的几个生命周期函数，就是强制开发者在render之前只做无副作用的操作**，而且能做的操作局限在根据props和state决定新的state
 
 
 
@@ -198,3 +198,84 @@ export default class Inputchild extends Component {
 
 ```
 
+## 3.Render可以返回数组和字符串
+
+## 4.错误处理机制
+
+react 16新增了一个componentDidCatch生命周期来捕捉错误
+
+```react
+class App extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      hasError:false
+    }
+  }
+  componentDidCatch(err,info){
+    console.log(err,info)
+    this.setState({
+      hasError:true
+    })
+  }
+  render() {
+    return this.state.hasError ?<h2>页面出错了！</h2> :(
+      <div>
+        <AuthRoute></AuthRoute>
+        <Switch>
+          <Route path="/bossinfo" component={BossInfo}></Route>
+          <Route path="/geniusinfo" component={GeniusInfo}></Route>
+          <Route path="/login" component={Login}></Route>
+          <Route path="/register" component={Register}></Route>
+          <Route path="/chat/:user" component={Chat}></Route>
+          <Route component={Dashboard}></Route>
+        </Switch>
+      </div>
+    )
+  }
+}
+```
+
+
+
+## 5.Portals组件
+
+ 可以渲染在它dom节点之外的元素，比如弹窗的灰色背景放在body之外
+
+## 6.更好更快的服务端渲染（重要）
+
+-   renderToString（只能解析成字符串）到renderToNodeString（解析成可读的字节流）的改变，直接渲染成node节点流
+-  使用ReactDom.hydrate(注水）取代render
+
+ 作者：知乎用户
+链接：https://www.zhihu.com/question/66068748/answer/238387766
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+
+1）React 的事件绑定，在服务端渲染时，并不会以 <div onclick="xxx" /> 这种内联事件形态出现。所以，ReactDOMServer 渲染的内容在「结构-样式-行为」铁三角关系里，缺失了「行为」
+
+
+
+2）在 React v15 版本里，ReactDOM.render 方法可以根据 data-react-checksum 的标记，复用 ReactDOMServer 的渲染结果，不重复渲染，而是根据 data-reactid 属性，找到需要绑定的事件元素，进行事件绑定的处理。补完「结构-样式-行为」。
+
+
+
+3）在 React v16 版本里，ReactDOMServer 渲染的内容不再有 data-react 的属性，而是尽可能复用 SSR 的 HTML 结构。
+
+
+
+这就带来了一个问题，ReactDOM.render 不再能够简单地用 data-react-checksum 的存在性来判断是否应该尝试复用，如果每次 ReactDOM.render 都要尽可能尝试复用，性能和语义都会出现问题。所以， ReactDOM 提供了一个新的 API， ReactDOM.hydrate() 。
+
+
+
+![img](https://pic4.zhimg.com/50/v2-3008f0991ca9df839f07810dc628b7c3_hd.jpg?source=1940ef5c)![img](https://pic4.zhimg.com/80/v2-3008f0991ca9df839f07810dc628b7c3_720w.jpg?source=1940ef5c)
+
+4）在 React v17 版本里，ReactDOM.render 则直接不再具有复用 SSR 内容的功能。见：[https://github.com/facebook/react/blob/master/src/renderers/dom/shared/__tests__/ReactRenderDocument-test.js#L32-L34](https://link.zhihu.com/?target=https%3A//github.com/facebook/react/blob/master/src/renderers/dom/shared/__tests__/ReactRenderDocument-test.js%23L32-L34)
+
+
+
+结论：**hydrate 描述的是 ReactDOM 复用 ReactDOMServer 服务端渲染的内容时尽可能保留结构，并补充事件绑定等 Client 特有内容的过程。**
+
+## 7.协议完全开源，MIT协议

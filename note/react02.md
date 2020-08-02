@@ -275,7 +275,7 @@ https://zh-hans.reactjs.org/docs/hooks-rules.html
 
 别忘记 `useContext` 的参数必须是 *context 对象本身*：
 
-**即首先要用MyContext（自己定义的）=React.createContext创建一个上下文环境，然后在Context.Provider中通过value来传递给子组件，然后子组件中才能使用useContext（MyContext）来获取数据**
+**即首先要用Context（自己定义的）=React.createContext创建一个上下文环境，然后在Context.Provider中通过value来传递给子组件，然后子组件中才能使用useContext（Context）来获取数据**
 
 ### useReducer
 
@@ -287,7 +287,7 @@ const [state, dispatch] = useReducer(reducer, initialArg, init);
 
 
 
-## 高阶组件函数调用（重要
+## HOC：高阶组件函数调用（重要
 
 为了提高组件的复用率，就要保证组件功能单一性，若要满足复杂需求就需要扩展功能单一的组件，于是有了HOC高阶组件。高阶组件是一个工厂函数，它接收一个组件并返回另一个组件
 
@@ -419,8 +419,12 @@ export default class HocTest extends Component {
 3. render：
 4. componentDidUpdate：
 
-
 ## 绑定this并传参的三种方式
+
+**如果直接写成onClick={this.handleMsg1()} />**
+
+**然后handleMsg1的声明又是普通函数的声明，会导致在函数内部调用this时指向错误，如要修改state：this.setState，会直接报错**
+
 1. 在事件中绑定this并传参：
 ```
     <input type="button" value="在事件中绑定this并传参" onClick={this.handleMsg1.bind(this, '🍕', '🍟')} />
@@ -435,6 +439,9 @@ export default class HocTest extends Component {
     }
 ```
 2. 在构造函数中绑定this并传参:
+
+**有一定的性能优化的作用，因为通过onClick={()=>this.hanleMsg()}的绑定方式，每次刷新时都是一个崭新的函数**
+
 ```
     // 修改构造函数中的代码：
     this.handleMsg2 = this.handleMsg2.bind(this, '🚗', '🚚');
@@ -513,41 +520,33 @@ reload：把一个方法传递给子组件
 ## 扩展
 ### context特性
 
-react中使用context实现祖代组件向后代组件跨层级传值，vue中的provide&indect来源于context。
+- const Context = React.createContext(defaultValue);
 
-在父组件上，直接共享一个context对象，子孙组件不需要逐层传递数据，可以直接获取
+创建一个 Context 对象。当 React 渲染一个订阅了这个 Context 对象的组件，这个组件会从组件树中离自身最近的那个匹配的 `Provider` 中读取到当前的 context 值。
 
-记住一串单词组合`getChildContextTypes`
-前3个、后3个、后两个
-一个方法、两个静态属性
+**只有当组件所处的树中没有匹配到 Provider 时，其 `defaultValue` 参数才会生效。**这有助于在不使用 Provider 包装组件的情况下对组件进行测试。注意：将 `undefined` 传递给 Provider 的 value 时，消费组件的 `defaultValue`不会生效。
+
+- const Provider = Context.Provider
 
 ```
-//1.在父组件中，定义一个function，这个function有个固定的名称，叫做getChildContext,内部必须返回一个对象，这个对象，就是要共享给所有子孙组件的数据
-  getChildContext() {
-    return {
-      color:this.state.color
-    }
-  }
-  
-  // 2.使用属性校验，规定一下传递给子组件的数据类型，需要定义一个静态的（static)childContextTypes（固定名称）
-  
-  static childContextTypes = {
-    color:ReactTypes.string //规定了传递给子组件的数据类型
-  }
-  
-  // 3.先属性校验，来校验一下父组件传递过来的参数类型
-  static contextTypes = {
-    color: ReactTypes.string //如果子组件想要使用父组件通过context共享的数据，一定要在使用前做一下数据校验
-  }
+<Context.Provider value={某个值} 》
 ```
 
-新版：
+Provider 接收一个 `value` 属性，传递给消费组件。**一个 Provider 可以和多个消费组件有对应关系。多个 Provider 也可以嵌套使用，里层的会覆盖外层的数据。**
 
-const Context = React.createContext();
+当 Provider 的 `value` 值发生变化时，它内部的所有消费组件都会重新渲染。Provider 及其内部 consumer 组件都不受制于 `shouldComponentUpdate` 函数，因此当 consumer 组件在其祖先组件退出更新的情况下也能更新。
 
-const Provider = Context.Provider
+- const Consumer = Context.Consumer
 
-const Consumer = Context.Consumer
+```
+<Context.Consumer>
+ {value => 基于context值进行渲染}
+</Context.Consumer>
+```
+
+这需要[函数作为子元素（function as a child）](https://zh-hans.reactjs.org/docs/render-props.html#using-props-other-than-render)这种做法。这个函数接收当前的 context 值，返回一个 React 节点。传递给函数的 `value` 值等同于往上组件树离这个 context 最近的 Provider 提供的 `value` 值。如果没有对应的 Provider，`value` 参数等同于传递给 `createContext()` 的 `defaultValue`。
+
+
 
 在context模式下有两个角色：Provider：外层提供数据的组件
 

@@ -216,15 +216,15 @@ class person {
 
 先npm i yarn -g
 
-下载npm i -g create-react-app
+**下载npm i -g create-react-app**
 
 使用：
 
-任意项目内create-react-app 项目名 （options） 构建项目结构
+**任意项目内create-react-app 项目名 （options） 构建项目结构**
 
-cd 项目目录 && npm i 安装依赖包
+**cd 项目目录 && npm i 安装依赖包**
 
-运行：用yarn！！！
+**运行：用yarn！！！**
 
 npm/yarn run start启动
 
@@ -600,7 +600,7 @@ export default function Parent(props) {
 
 1.里面可以直接传对象，也可以写一个方法，**写方法时要return**
 
-```
+```js
 changeHandler = (e)=> {
 		//这里react默认方法中this指向undefined
 		//console.log(e.target.value)
@@ -633,7 +633,7 @@ changeHandler = (e)=> {
 
 **解决方法是第一个参数不以对象的形式来修改，而是以函数的形式修改**，函数参数(state,props),state代表**上一次更新后**的值，然后在函数里直接通过state.counter来修改，不要再拿this.state.counter修改（可能拿到旧值））
 
-```
+```js
 // 假如couter初始值为0，执行三次以后其结果是多少？
     // 若同一个key多次出现，最后那个起作用
     // this.setState({ counter: this.state.counter + 1 }, ()=>{
@@ -688,7 +688,7 @@ changeHandler = (e)=> {
 
 第一种方法：
 
-```
+```js
 <input type="text" value={this.state.num} onChange={(e)=>{
 					 this.changeHandler(e)
 				 }} />箭头函数本身就是向上绑定，这里是window
@@ -789,7 +789,7 @@ changeHandler = (e)=> {
 
 父组件引用子组件标签时，在标签中间传递的标签或内容子组件可以通过this.props.children访问到
 
-```
+```js
 父组件：
 ReactDOM.render(<CommentList header={<div>头部</div>}>
 <ul><li>1</li><li>2</li><li>3</li></ul>
@@ -975,7 +975,7 @@ render() {
 
 解决方案：
 
-1. ```
+1. ```react
    通用，且更灵活
    render() {
    return <React.Fragment>
@@ -985,7 +985,7 @@ render() {
    }
    ```
 
-2. ```
+2. ```react
    在react16以后支持编写[]
    render() {
    return [<h1>1</h1>

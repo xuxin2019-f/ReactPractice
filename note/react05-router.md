@@ -131,6 +131,8 @@ import { HashRouter,BrowserRouter as Router, Route, NavLink, Switch, Redirect } 
 在所有路由规则都不匹配的情况下，重定向到首页
 ```
 
+**注意redirect不能用在Route外**
+
 或者运用到404页面
 
 设定一个没有path的路由在路由列表最后面，表示一定匹配
@@ -193,8 +195,8 @@ import { HashRouter,BrowserRouter as Router, Route, NavLink, Switch, Redirect } 
 
 **同理，构造函数组件会接收三个参数：**
 
-```
-functionDetail({match,history,location}){
+```js
+function Detail({match,history,location}){
 console.log(match,history,location);
 return(
 <div>
@@ -258,11 +260,22 @@ function PrivateRoute({ component: Component, isLogin, ...rest }) {
 
 ### react-router原理
 
+**默认情况下，经过路由匹配渲染的组件都拥有this.props,通过this.props都可以拿到history、match、location三个路由参数。**
+
+**！不是与路由相连的组件想要使用路由参数可以使用withRouter插件**
+
+```
+import React from "react";
+import { withRouter } from "react-router-dom";
+@withRouter
+class 。。。。。
+```
+
 react-router秉承一切皆组件，因此实现的核心就是**BrowserRouter，Router，Link**
 
 
 
-**BrowserRouter**：将match、历史记录管理对象history、location变更监听**初始化**及向下组件传递（相当于创建了个context上下文），**即BrowserRouter的所有子组件都有history、location、match属性。**并展示this.props.children内容
+**BrowserRouter**：将match、历史记录管理对象history、location变更监听**初始化**及向下组件传递（相当于创建了个context上下文），**即BrowserRouter的所有子组件都有history、location、match属性。并展示this.props.children内容**
 
 创建MyRouterTest.js,**首先实现BrowserRouter**
 
