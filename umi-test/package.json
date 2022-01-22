@@ -330,7 +330,7 @@
     "negotiator": "^0.6.2",
     "neo-async": "^2.6.1",
     "nice-try": "^1.0.5",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "node-libs-browser": "^2.2.1",
     "normalize-path": "^3.0.0",
     "normalize-url": "^4.5.0",
