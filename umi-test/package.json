@@ -168,7 +168,7 @@
     "etag": "^1.8.1",
     "eventlistener": "^0.0.1",
     "events": "^3.1.0",
-    "eventsource": "^1.0.7",
+    "eventsource": "^2.0.2",
     "evp_bytestokey": "^1.0.3",
     "exenv": "^1.2.2",
     "expand-brackets": "^2.1.4",
